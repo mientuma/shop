@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <style>
+    .product
+    {
+    float: left;
+    margin: 30px;
+    padding: 10px;
+    width: 200px;
+    height: 200px;
+    border: white solid 2px;
+    text-align: center;
+    }
+
+    .product:hover
+    {
+        float: left;
+        margin: 30px;
+        padding: 10px;
+        width: 200px;
+        height: 200px;
+        border: darkgray solid 2px;
+        text-align: center;
+        border-radius: 5px;
+    }
+
+    .navigation
+    {
+        clear: both;
+    }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        Sortuj według:
+        {{ knp_pagination_sortable(products, 'Ceny', 'p.price') }}
+        {{ knp_pagination_sortable(products, 'Nazwy', 'p.name') }}
+{% for product in products %}
+
+    <div class="product">
+        {{ product.name }}<br><br>
+        Tu kiedyś będzie miniaturka produktu nr. {{ product.id }}<br><br>
+        Cena: {{ product.price }} PLN<br><br>
+        <a href="{{ path('shopproductinfo', {'id': product.id}) }}" class="btn btn-default">Zobacz</a>
+    </div>
+
+{% endfor %}
+
+        <div class="navigation text-center">
+            {{ knp_pagination_render(products) }}
+        </div>
+    </div>
+{% endblock %}

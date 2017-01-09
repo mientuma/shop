@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+    <div class="container">
+        <table class="table table-striped">
+            <tr>
+                <td>#</td>
+                <td>Nazwa Produktu:</td>
+                <td>Cena:</td>
+                <td>Ilość</td>
+                <td>Wartość:</td>
+                <td>Status:</td>
+            </tr>
+        {% for orderDetail in orderDetails %}
+            <tr>
+                <td>{{ loop.index }}.</td>
+                <td><a href="{{ path('shopproductinfo', {'id': orderDetail.product.id}) }}" target="_blank">{{ orderDetail.product.name }}</a></td>
+                <td>{{ orderDetail.productPrice }} PLN</td>
+                <td>{{ orderDetail.productQuantity }}</td>
+                <td>{{ orderDetail.finalPrice }} PLN</td>
+                <td>{{ order.status }}</td>
+            </tr>
+        {% endfor %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>Sposób dostawy:</td>
+                <td>{{ order.delivery.name }}</td>
+                <td>{{ order.delivery.price }} PLN</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Razem:</td>
+                <td>{{ sum }} PLN</td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+
+{% endblock %}

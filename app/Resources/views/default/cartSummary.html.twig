@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <style>
+        .btn-left
+        {
+            text-align: left;
+        }
+
+        .btn-right
+        {
+            text-align: right;
+        }
+
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+        {% for flash_message in app.session.flashBag.get('deleteFromCartNote') %}
+            <div class="flash-notice">
+                <div class="alert alert-danger">
+                    {{ flash_message }}
+                </div>
+            </div>
+        {% endfor %}
+        <hr>
+            <table class="table table-striped">
+
+                <tr>
+                    <th>#</th>
+                    <th>Nazwa produktu:</th>
+                    <th>Ilość:</th>
+                    <th>Cena:</th>
+                    <th>Łacznie:</th>
+                </tr>
+        {% for cart in carts %}
+                    <tr>
+                        <th>{{ loop.index }}.</th>
+                        <th>{{ cart.product.name }}</th>
+                        <th>{{ cart.quantity }}</th>
+                        <th>{{ cart.product.price }} PLN</th>
+                        <th>{{ cart.finalPrice }} PLN</th>
+                    </tr>
+        {% endfor %}
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>Dostawa:</th>
+                    <th>{{ deliveryData.name }}</th>
+                    <th>{{ deliveryData.price }} PLN</th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>Razem: </th>
+                    <th>{{ sum }} PLN</th>
+                </tr>
+            </table>
+        <div class="btn-left">
+            <a href="{{ path('cart') }}" class="btn btn-default" style="text-align: left">Powrót</a>
+        </div>
+        <div class="btn-right">
+            <a href="{{ path('order') }}" class="btn btn-default" style="text-align: right">Dalej</a>
+        </div>
+    </div>
+
+{% endblock %}

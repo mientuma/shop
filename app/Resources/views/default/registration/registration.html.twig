@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block redirect %}
+    {% if app.session.get('isLoggedIn') %}
+        <meta http-equiv="refresh" content="0; url={{ path('homepage') }}" />
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    {% if not app.session.get('isLoggedIn') %}
+    <div class="container">
+        <div class="registration">
+            {{ form_start(registrationForm) }}
+            {{ form_end(registrationForm) }}
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}

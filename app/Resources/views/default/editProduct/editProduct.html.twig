@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <div class="container">
+    <a class="btn btn-default" href="{{ path('showproducts') }}">Powrót</a>
+    <hr>
+    {{ form_start(editForm) }}
+    {{ form_end(editForm) }}
+    </div>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <style>
+        .btn-left
+        {
+            text-align: left;
+        }
+
+        .btn-right
+        {
+            text-align: right;
+        }
+
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+        {% for flash_message in app.session.flashBag.get('deleteFromCartNote') %}
+            <div class="flash-notice">
+                <div class="alert alert-danger">
+                    {{ flash_message }}
+                </div>
+            </div>
+        {% endfor %}
+        <hr>
+        <div class="btn-right">
+           <a href="{{ path('clearCart') }}" class="btn btn-default">Wyczyść koszyk</a>
+        </div>
+        <hr>
+        <form action="{{ path('cart') }}" name="basket" method="post" class="form-horizontal">
+            <table class="table table-striped">
+
+                <tr>
+                    <th>#</th>
+                    <th>Nazwa produktu:</th>
+                    <th>Ilość:</th>
+                    <th>Cena:</th>
+                    <th>Łacznie:</th>
+                    <th></th>
+                </tr>
+        {% for cart in carts %}
+                    <tr>
+                        <th></th>
+                        <th>{{ cart.product.name }}</th>
+                        <th><input type="text" name="quantity_{{ cart.id }}" value="{{ cart.quantity }}"/></th>
+                        <th>{{ cart.product.price }}</th>
+                        <th>{{ cart.finalPrice }} PLN</th>
+                        <th><a href="{{ path('deleteFromCart', {'id': cart.product.id}) }}" class="btn btn-danger">Usuń</a> </th>
+                    </tr>
+        {% endfor %}
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>Razem: </th>
+                    <th>{{ sum }} PLN</th>
+                    <th></th>
+                </tr>
+            </table>
+            <button type="submit" value="{{ path('cart') }}">Podlicz</button>
+        </form>
+            <br/><br/>
+        <form action="{{ path('summaryCart') }}" name="basketSummary" method="post" class="form-horizontal">
+            <table class="table table-striped">
+                <tr>
+                    <td>Sposób dostawy</td>
+                    <td>Cena:</td>
+                    <td></td>
+                </tr>
+                {% for deliveryOption in deliveryOptions %}
+                    <tr>
+                        <td>{{ deliveryOption.name }}</td>
+                        <td>{{ deliveryOption.price }} PLN</td>
+                        <td><input type="radio" name="delivery" value="{{ deliveryOption.id }}"/></td>
+                    </tr>
+                {% endfor %}
+            </table>
+                <button type="submit" value="#">Dalej</button>
+        </form>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+    {% for flash_message in app.session.flashBag.get('addNote') %}
+        <div class="flash-notice">
+            <div class="alert alert-success">
+                {{ flash_message }}
+            </div>
+        </div>
+    {% endfor %}
+    {% for flash_message in app.session.flashBag.get('editNote') %}
+        <div class="flash-notice">
+            <div class="alert alert-info">
+                {{ flash_message }}
+            </div>
+        </div>
+    {% endfor %}
+    {% for flash_message in app.session.flashBag.get('deleteNote') %}
+        <div class="flash-notice">
+            <div class="alert alert-danger">
+                {{ flash_message }}
+            </div>
+        </div>
+    {% endfor %}
+
+    <table class="table table-striped">
+    <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+{% for product in products %}
+
+    <tr>
+        <th>{{ loop.index }}.</th>
+        <th>{{ product.name }}</th>
+        <th>{{ product.price }}</th>
+        <th><a href="{{ path('showproductdetails', {'id': product.id}) }}" class="btn btn-success">Szczegóły</a> </th>
+        <th><a href="{{ path('editproduct', {'id': product.id}) }}" class="btn btn-default">Edytuj</a> </th>
+        <th><a href="{{ path('deleteproduct', {'id': product.id}) }}" class="btn btn-danger">Usuń</a> </th>
+    </tr>
+
+{% endfor %}
+    </table>
+        <a href="{{ path('addproduct') }}" class="btn btn-default">Dodaj nowy produkt</a>
+    </div>
+{% endblock %}

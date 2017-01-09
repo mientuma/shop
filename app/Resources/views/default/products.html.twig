@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+        {% for product in products %}
+
+            <div class="product">
+                {{ product.name }} <br>
+                {{ product.price }} PLN
+            </div>
+
+        {% endfor %}
+{% endblock %}

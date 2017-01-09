@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <div class="container">
+        {{ form_start(form) }}
+
+        {% for sample in form. %}
+            {{ form_row(form.name) }}
+        {% endfor %}
+
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

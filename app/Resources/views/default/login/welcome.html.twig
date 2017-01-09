@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+    <div class="container">
+        <div class="testMessage">
+            Zostałeś pomyślnie zalogowany. Możesz się wylogować klikając
+            <a href="{{ path('logout') }}">tutaj</a>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <div class="container">
+    {% for flash_message in app.session.flashBag.get('LoginSuccessNote') %}
+        <div class="flash-notice">
+            <div class="alert alert-success">
+                {{ flash_message }}
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <table style="width:100%">
+    <tr>
+        <th>Id</th>
+        <th>Username</th>
+        <th>Password</th>
+        <th>Email</th>
+        <th>Registration date</th>
+    </tr>
+{% for user in users %}
+
+    <tr>
+        <th>{{ user.id }}</th>
+        <th>{{ user.user }}</th>
+        <th>{{ user.pass }}</th>
+        <th>{{ user.email }}</th>
+        <th>{{ user.registerDate|date("d.m.y H:s:i") }}</th>
+    </tr>
+
+{% endfor %}
+    </table>
+{% endblock %}

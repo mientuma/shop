@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <style>
+        .gallery
+        {
+            float: left;
+            margin-right: auto;
+            margin-left: auto;
+            width: 50%;
+            height: 360px;
+            border: black solid 1px;
+            text-align: center;
+            border-radius: 3px;
+            padding-top: 160px;
+            font-size: 20px;
+        }
+
+        .basicInfo
+        {
+            float: left;
+            margin-right: auto;
+            margin-left: auto;
+            width: 25%;
+            height: 360px;
+            border: black solid 1px;
+            text-align: center;
+            border-radius: 3px;
+            padding-top: 160px;
+            font-size: 20px;
+        }
+
+        .addToCart
+        {
+            float: left;
+            margin-right: auto;
+            margin-left: auto;
+            width: 25%;
+            height: 360px;
+            border: black solid 1px;
+            text-align: center;
+            border-radius: 3px;
+            padding-top: 160px;
+            font-size: 20px;
+        }
+
+        .clearBoth
+        {
+            clear: both;
+        }
+
+        .description
+        {
+            float: left;
+            margin-right: auto;
+            margin-left: auto;
+            width: 100%;
+            height: auto;
+            border: black solid 1px;
+            text-align: justify;
+            border-radius: 3px;
+            padding-top: 10px;
+            font-size: 20px;
+        }
+    </style>
+{% endblock %}
+
+
+{% block body %}
+    <div class="container">
+    <h2 class="page-header">{{ product.name }}</h2>
+
+        <div class="gallery">
+            Tu kiedyś będzie galeria...
+        </div>
+        <div class="basicInfo">
+            Tu będą jakieś podstawowe informacje o produkcie
+        </div>
+        <div class="addToCart">
+            Cena: {{ product.price }} PLN
+            <a href="{{ path('addToCart', {'id': product.id}) }}" class="btn btn-default">Dodaj do koszyka</a>
+        </div>
+
+        <div class="clearBoth"></div>
+
+        <hr>
+
+        <div class="description">
+
+            {{ product.description }}
+
+        </div>
+
+    </div>
+{% endblock %}
