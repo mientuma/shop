@@ -44,62 +44,6 @@ class DataController extends Controller
         return new Response('<html><body>Admin page!</body></html>');
     }
 
-    /**
-     * @Route("/registration", name="registration")
-     */
-    public function registrationAction(Request $request)
-    {
-        $registration = new Users();
-        $registrationForm = $this->createForm(RegistrationForm::class, $registration);
-
-        $registrationForm->handleRequest($request);
-
-        if ($registrationForm->isSubmitted() && $registrationForm->isValid())
-        {
-            $user = $registrationForm->get('user')->getData();
-            $pass = $registrationForm->get('pass')->getData();
-            $passwordHash = password_hash($pass,PASSWORD_DEFAULT);
-            $email = $registrationForm->get('email')->getData();
-            $registerDate = new \DateTime();
-            $role = "user";
-
-            $registration->setUser($user);
-            $registration->setPass($passwordHash);
-            $registration->setEmail($email);
-            $registration->setRegisterDate($registerDate);
-            $registration->setRole($role);
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($registration);
-            $em->flush();
-            $this->addFlash(
-                'RegistrationNote',
-                'Zostałeś pomyślnie zarejestrowany! Teraz możesz się zalogować.'
-            );
-            return $this->redirectToRoute('login');
-        }
-
-        return $this->render('default/registration/registration.html.twig', array(
-            'registrationForm' => $registrationForm->createView(),
-        ));
-    }
-
-    /**
-     * @Route("/login", name="login")
-     */
-    public function loginAction(Request $request)
-    {
-        $authenticationUtils = $this->get('security.authentication_utils');
-
-        $error = $authenticationUtils->getLastAuthenticationError();
-        $lastUsername = $authenticationUtils->getLastUsername();
-
-        return $this->render('default/login/login.html.twig', array(
-            'last_username' => $lastUsername,
-            'error'         => $error,
-        ));
-    }
-
 
     /**
      * @Route("/products", name="showproducts")
@@ -217,33 +161,6 @@ class DataController extends Controller
         );
         return $this->redirectToRoute('showproducts');
 
-    }
-
-    /**
-     * @Route("/register", name="user_registration")
-     */
-    public function registerAction(Request $request)
-    {
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid())
-        {
-            $password = $this->get('security.password_encoder')
-                ->encodePassword($user, $user->getPlainPassword());
-            $user->setPassword($password);
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
-
-            return $this->redirectToRoute('homepage');
-        }
-
-        return $this->render(
-            'default/register.html.twig',
-            array('form' => $form->createView())
-        );
     }
 
     /**
