@@ -599,7 +599,6 @@ class DataController extends Controller
         foreach ($samples as $sample)
         {
             $sample->getName();
-            $dupa5555;
         }
 
         $form = $this->createForm(SampleForm::class, $sample);
