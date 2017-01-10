@@ -27,9 +27,10 @@ security:
                 require_previous_session: false
             logout:       true
             anonymous:    true
+            switch_user:  true
             remember_me:
                 secret:   '%secret%'
-                lifetime: 20
+                lifetime: 31536000
 
     access_control:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
