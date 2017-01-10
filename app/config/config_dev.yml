@@ -34,5 +34,8 @@ monolog:
 twig:
   cache: false
 
-#swiftmailer:
-#    delivery_address: me@example.com
+swiftmailer:
+    delivery_address: iiyvbfau@sharklasers.com
+#   transport: gmail
+#   username:
+#   password:

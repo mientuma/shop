@@ -1,68 +1,18 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8" />
-        {% block redirect %}{% endblock %}
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-        <link rel="stylesheet" type="text/css" href="{{ asset('bootstrap/dist/css/bootstrap.min.css') }}" />
-        {% block stylesheets %}{% endblock %}
-        <style>
-            body
-            {
-                padding-top: 70px;
-            }
-        </style>
-    </head>
-    <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">Shop</a>
-            </div>
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li><a href="{{ path('homepage') }}">Index</a></li>
-                    <li><a href="#">Login</a></li>
-                    <li><a href="#">Registration</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-        <div>
-            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
-                <a href="{{ path('fos_user_security_logout') }}">
-                    {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
-                </a>
-            {% else %}
-                <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
-            {% endif %}
-        </div>
+{% extends '::base.html.twig' %}
 
-        {% if app.request.hasPreviousSession %}
-            {% for type, messages in app.session.flashbag.all() %}
-                {% for message in messages %}
-                    <div class="flash-{{ type }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
+{% block body %}
+    {% if app.request.hasPreviousSession %}
+        {% for type, messages in app.session.flashbag.all() %}
+            {% for message in messages %}
+                <div class="flash-{{ type }}">
+                    {{ message }}
+                </div>
             {% endfor %}
-        {% endif %}
+        {% endfor %}
+    {% endif %}
 
-        <div>
-            {% block fos_user_content %}
-            {% endblock fos_user_content %}
-        </div>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-        <script src="{{ asset('bootstrap/dist/js/bootstrap.min.js') }}"></script>
-        <script src="{{ asset('jquery/dist/jquery.min.js') }}"></script>
-    </body>
-</html>
+<div>
+    {% block fos_user_content %}
+    {% endblock fos_user_content %}
+</div>
+{% endblock %}
