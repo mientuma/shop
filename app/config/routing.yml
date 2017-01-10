@@ -1,9 +1,11 @@
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation
+    prefix: /{_locale}
 
 logout:
     path: /logout
 
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+    prefix: /{_locale}
