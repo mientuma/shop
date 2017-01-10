@@ -19,6 +19,10 @@
     {% include '::navbar.html.twig' %}
 {% endblock topnav %}
 
+{% block sidebar %}
+    {% include '::sidebar.html.twig' %}
+{% endblock sidebar %}
+
 {% block body %}{% endblock %}
 {% block javascripts %}{% endblock %}
     <script src="{{ asset('bootstrap/dist/js/bootstrap.min.js') }}"></script>
