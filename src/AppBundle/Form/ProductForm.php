@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 
 class ProductForm extends AbstractType
@@ -29,6 +30,11 @@ class ProductForm extends AbstractType
                 'invalid_message' => 'Podano niewłaściwą wartość.'
             ))
             ->add('description', TextareaType::class, array('label' =>'Opis:'))
+            ->add('category', EntityType::class, array(
+                'label' => 'Kategoria:',
+                'class' => 'AppBundle\Entity\Category',
+                'choice_label' => 'name'
+            ) )
             ->add('send', SubmitType::class, array('label' => 'Wyślij'))
             ->getForm();
     }

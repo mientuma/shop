@@ -71,12 +71,15 @@ class DataController extends Controller
             $productName = $productForm->get('name')->getData();
             $productPrice = $productForm->get('price')->getData();
             $productDescription = $productForm->get('description')->getData();
+            $productCategory = $productForm->get('category')->getData();
             $productAddDate = new \DateTime();
 
             $product->setName($productName);
             $product->setPrice($productPrice);
             $product->setDescription($productDescription);
             $product->setAddTime($productAddDate);
+            $product->setCategoryId($productCategory);
+
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($product);
@@ -116,6 +119,7 @@ class DataController extends Controller
         $product->getName();
         $product->getPrice();
         $product->getDescription();
+        $product->getCategoryId();
 
         $editForm = $this->createForm(EditProductForm::class, $product);
 
@@ -125,6 +129,7 @@ class DataController extends Controller
             $productName = $editForm->get('name')->getData();
             $productPrice = $editForm->get('price')->getData();
             $productDescription = $editForm->get('description')->getData();
+            $productCategory = $editForm->get('category')->getData();
 
             $em = $this->getDoctrine()->getManager();
             $product = $em->getRepository('AppBundle:Products')->find($id);
@@ -132,6 +137,7 @@ class DataController extends Controller
             $product->setName($productName);
             $product->setPrice($productPrice);
             $product->setDescription($productDescription);
+            $product->setCategoryId($productCategory);
 
             $em->flush();
             $this->addFlash(
