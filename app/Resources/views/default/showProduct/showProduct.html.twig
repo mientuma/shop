@@ -1,7 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container">
     {% for flash_message in app.session.flashBag.get('addNote') %}
         <div class="flash-notice">
             <div class="alert alert-success">
@@ -47,5 +46,4 @@
 {% endfor %}
     </table>
         <a href="{{ path('addproduct') }}" class="btn btn-default">Dodaj nowy produkt</a>
-    </div>
 {% endblock %}

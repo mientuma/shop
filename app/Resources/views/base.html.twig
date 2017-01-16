@@ -11,21 +11,22 @@
         body
         {
             padding-top: 70px;
+            background-color: #eee;
         }
     </style>
 </head>
 <body>
-{% block topnav %}
-    {% include '::navbar.html.twig' %}
-{% endblock topnav %}
 
-{% block sidebar %}
-    {% include '::sidebar.html.twig' %}
-{% endblock sidebar %}
+    <div class="container">
+        {% block topnav %}
+            {% include '::navbar.html.twig' %}
+        {% endblock topnav %}
+        {% block body %}{% endblock %}
+    </div>
 
-{% block body %}{% endblock %}
-{% block javascripts %}{% endblock %}
-    <script src="{{ asset('bootstrap/dist/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('jquery/dist/jquery.min.js') }}"></script>
+    {% block javascripts %}{% endblock %}
+        <script src="{{ asset('jquery/dist/jquery.min.js') }}"></script>
+        <script src="{{ asset('bootstrap/dist/js/bootstrap.min.js') }}"></script>
+
 </body>
 </html>
