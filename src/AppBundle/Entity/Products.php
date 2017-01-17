@@ -101,11 +101,7 @@ class Products
 
     public function __construct()
     {
-        $this->bascets = new ArrayCollection();
-    }
-
-    public function __construct2()
-    {
+        $this->cart = new ArrayCollection();
         $this->orderedProducts = new ArrayCollection();
     }
 

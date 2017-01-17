@@ -27,11 +27,27 @@ class User extends BaseUser
     private $cart;
 
     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Orders", mappedBy="user")
+     * @ORM\JoinColumn(name="id", referencedColumnName="userId")
+     */
+    private $orders;
+
+    /**
      * @return mixed
      */
     public function getCart()
     {
         return $this->cart;
+    }
+
+    /**
+     * Get orders
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getOrders()
+    {
+        return $this->orders;
     }
 
     /**
@@ -66,10 +82,35 @@ class User extends BaseUser
         $this->cart->removeElement($cart);
     }
 
+    /**
+     * Add order
+     *
+     * @param \AppBundle\Entity\Orders $order
+     *
+     * @return User
+     */
+    public function addOrder(\AppBundle\Entity\Orders $order)
+    {
+        $this->orders[] = $order;
+
+        return $this;
+    }
+
+    /**
+     * Remove order
+     *
+     * @param \AppBundle\Entity\Orders $order
+     */
+    public function removeOrder(\AppBundle\Entity\Orders $order)
+    {
+        $this->orders->removeElement($order);
+    }
+
     public function __construct()
     {
         parent::__construct();
         $this->cart = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
 }

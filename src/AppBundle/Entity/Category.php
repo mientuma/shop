@@ -42,13 +42,8 @@ class Category
     public function __construct()
     {
         $this->subCategory= new ArrayCollection();
-    }
-
-    public function __construct2()
-    {
         $this->products= new ArrayCollection();
     }
-
 
     public function getId()
     {
