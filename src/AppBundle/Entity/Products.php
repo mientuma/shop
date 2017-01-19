@@ -79,9 +79,9 @@ class Products
     /**
      * @var int
      *
-     * @ORM\Column(name="categoryId", type="integer")
+     * @ORM\Column(name="subCategoryId", type="integer")
      */
-    private $categoryId;
+    private $subCategoryId;
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Cart", mappedBy="product")
@@ -94,10 +94,11 @@ class Products
     private $orderedProducts;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Category", inversedBy="products")
-     * @ORM\JoinColumn(name="categoryId", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SubCategory", inversedBy="products")
+     * @ORM\JoinColumn(name="subCategoryId", referencedColumnName="id")
      */
-    private $category;
+    private $subCategory;
+
 
     public function __construct()
     {
@@ -281,51 +282,51 @@ class Products
 
 
     /**
-     * Set categoryId
+     * Set subCategoryId
      *
-     * @param integer $categoryId
+     * @param integer $subCategoryId
      *
      * @return Products
      */
-    public function setCategoryId($categoryId)
+    public function setSubCategoryId($subCategoryId)
     {
-        $this->categoryId = $categoryId;
+        $this->subCategoryId = $subCategoryId;
 
         return $this;
     }
 
 
     /**
-     * Get categoryId
+     * Get subCategoryId
      *
      * @return integer
      */
-    public function getCategoryId()
+    public function getSubCategoryId()
     {
-        return $this->categoryId;
+        return $this->subCategoryId;
     }
 
     /**
-     * Set category
+     * Set subCategory
      *
-     * @param \AppBundle\Entity\Category $category
+     * @param \AppBundle\Entity\SubCategory $subCategory
      *
      * @return Products
      */
-    public function setCategory(\AppBundle\Entity\Category $category = null)
+    public function setSubCategory(\AppBundle\Entity\SubCategory $subCategory = null)
     {
-        $this->category = $category;
+        $this->subCategory = $subCategory;
 
         return $this;
     }
 
     /**
-     * Get category
+     * Get subCategory
      *
-     * @return \AppBundle\Entity\Category
+     * @return \AppBundle\Entity\SubCategory
      */
-    public function getCategory()
+    public function getSubCategory()
     {
-        return $this->category;
+        return $this->subCategory;
     }
 }

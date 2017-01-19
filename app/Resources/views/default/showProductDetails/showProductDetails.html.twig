@@ -10,7 +10,8 @@
     <ul class="list-group">
         <li class="list-group-item">Cena: {{ product.price }}</li>
         <li class="list-group-item">Opis: {{ product.description }}</li>
-        <li class="list-group-item">Kategoria: {{ product.category.name }}</li>
+        <li class="list-group-item">Kategoria: {{ product.subcategory.category.name }} </li>
+        <li class="list-group-item">Podkategoria: {{ product.subcategory.name }}</li>
         <li class="list-group-item">Data dodania: {{ product.addTime|date("d.m.y H:i:s") }}</li>
     </ul>
 {% endblock %}

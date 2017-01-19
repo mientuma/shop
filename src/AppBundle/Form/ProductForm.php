@@ -8,6 +8,7 @@
 
 namespace AppBundle\Form;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -30,9 +31,9 @@ class ProductForm extends AbstractType
                 'invalid_message' => 'Podano niewłaściwą wartość.'
             ))
             ->add('description', TextareaType::class, array('label' =>'Opis:'))
-            ->add('category', EntityType::class, array(
-                'label' => 'Kategoria:',
-                'class' => 'AppBundle\Entity\Category',
+            ->add('subCategory', EntityType::class, array(
+                'label' => 'Podkategoria:',
+                'class' => 'AppBundle\Entity\SubCategory',
                 'choice_label' => 'name'
             ) )
             ->add('send', SubmitType::class, array('label' => 'Wyślij'))

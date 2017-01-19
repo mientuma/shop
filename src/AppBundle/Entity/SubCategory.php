@@ -43,6 +43,16 @@ class SubCategory
     private $category;
 
     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Products", mappedBy="subCategory")
+     */
+    private $products;
+
+    public function __construct()
+    {
+        $this->products= new ArrayCollection();
+    }
+
+    /**
      * Get id
      *
      * @return int
@@ -123,5 +133,39 @@ class SubCategory
     public function getCategory()
     {
         return $this->category;
+    }
+
+    /**
+     * Add product
+     *
+     * @param \AppBundle\Entity\Products $product
+     *
+     * @return SubCategory
+     */
+    public function addProduct(\AppBundle\Entity\Products $product)
+    {
+        $this->products[] = $product;
+
+        return $this;
+    }
+
+    /**
+     * Remove product
+     *
+     * @param \AppBundle\Entity\Products $product
+     */
+    public function removeProduct(\AppBundle\Entity\Products $product)
+    {
+        $this->products->removeElement($product);
+    }
+
+    /**
+     * Get products
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProducts()
+    {
+        return $this->products;
     }
 }
