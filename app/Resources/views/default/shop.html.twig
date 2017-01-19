@@ -34,9 +34,11 @@
 
 {% block body %}
     <div class="container">
+        <div class="paginator">
         Sortuj według:
         {{ knp_pagination_sortable(products, 'Ceny', 'p.price') }}
         {{ knp_pagination_sortable(products, 'Nazwy', 'p.name') }}
+        </div>
 {% for product in products %}
 
     <div class="product">
