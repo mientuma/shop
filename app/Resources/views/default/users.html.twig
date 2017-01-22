@@ -1,21 +1,17 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    <table style="width:100%">
+    <table class="table table-striped">
     <tr>
-        <th>Id</th>
+        <th>#</th>
         <th>Username</th>
-        <th>Password</th>
-        <th>Email</th>
-        <th>Registration date</th>
+        <th>Info</th>
     </tr>
 {% for user in users %}
 
     <tr>
-        <th>{{ user.id }}</th>
-        <th>{{ user.user }}</th>
-        <th>{{ user.pass }}</th>
-        <th>{{ user.email }}</th>
-        <th>{{ user.registerDate|date("d.m.y H:s:i") }}</th>
+        <th>{{ loop.index }}</th>
+        <th>{{ user.username }}</th>
+        <th><a href="#" class="btn btn-default">Szczegóły</a></th>
     </tr>
 
 {% endfor %}

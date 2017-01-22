@@ -25,6 +25,7 @@
                 </div>
             </div>
         {% endfor %}
+
         <hr>
         <div class="btn-right">
            <a href="{{ path('clearCart') }}" class="btn btn-default">Wyczyść koszyk</a>
@@ -43,7 +44,7 @@
                 </tr>
         {% for cart in carts %}
                     <tr>
-                        <th></th>
+                        <th>{{ loop.index }}.</th>
                         <th>{{ cart.product.name }}</th>
                         <th><input type="text" name="quantity_{{ cart.id }}" value="{{ cart.quantity }}"/></th>
                         <th>{{ cart.product.price }}</th>
@@ -71,6 +72,13 @@
             <button type="submit" value="{{ path('cart') }}">Podlicz</button>
         </form>
             <br/><br/>
+        {% for flash_message in app.session.flashBag.get('noDelivery') %}
+            <div class="flash-notice">
+                <div class="alert alert-danger">
+                    {{ flash_message }}
+                </div>
+            </div>
+        {% endfor %}
         <form action="{{ path('summaryCart') }}" name="basketSummary" method="post" class="form-horizontal">
             <table class="table table-striped">
                 <tr>

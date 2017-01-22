@@ -99,6 +99,13 @@ class Products
      */
     private $subCategory;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="quantity", type="integer", nullable=true)
+     */
+    private $quantity;
+
 
     public function __construct()
     {
@@ -328,5 +335,29 @@ class Products
     public function getSubCategory()
     {
         return $this->subCategory;
+    }
+
+    /**
+     * Set quantity
+     *
+     * @param integer $quantity
+     *
+     * @return Products
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    /**
+     * Get quantity
+     *
+     * @return integer
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
     }
 }

@@ -99,6 +99,14 @@ class Products
      */
     private $subCategory;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="quantity", type="integer")
+     */
+    private $quantity;
+
+
     public function __construct()
     {
         $this->cart = new ArrayCollection();

@@ -77,6 +77,7 @@
             Tu będą jakieś podstawowe informacje o produkcie
         </div>
         <div class="addToCart">
+            Dostępność: {{ product.quantity }} szt.<br/>
             Cena: {{ product.price }} PLN
             <a href="{{ path('addToCart', {'id': product.id}) }}" class="btn btn-default">Dodaj do koszyka</a>
         </div>

@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+    <div class="container">
+        <table class="table table-striped">
+            <tr>
+                <td>#</td>
+                <td>ID zamówienia:</td>
+                <td>Zamawiający:</td>
+                <td>Data złożenia:</td>
+                <td>Status:</td>
+                <td></td>
+            </tr>
+        {% for order in orders %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td><a href="{{ path('orderDetails', {'id': order.id}) }}">{{ order.id }}</a></td>
+                <td><a href="#">{{ order.user.username}}</a></td>
+                <td>{{ order.orderTime|date("d.m.y H:i:s") }}</td>
+                <td>{{ order.status }}</td>
+                <td><a href="{{ path('orderDetails', {'id': order.id}) }}" class="btn btn-default">Szczegóły</a> </td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+
+{% endblock %}

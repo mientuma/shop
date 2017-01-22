@@ -37,15 +37,6 @@ class DataController extends Controller
     }
 
     /**
-     * @Route("/admin")
-     */
-    public function adminAction()
-    {
-        return new Response('<html><body>Admin page!</body></html>');
-    }
-
-
-    /**
      * @Route("/products", name="showproducts")
      */
     public function showProductsAction()
@@ -71,14 +62,15 @@ class DataController extends Controller
             $productName = $productForm->get('name')->getData();
             $productPrice = $productForm->get('price')->getData();
             $productDescription = $productForm->get('description')->getData();
-            $productCategory = $productForm->get('category')->getData();
+            $productSubCategory = $productForm->get('subCategory')->getData();
             $productAddDate = new \DateTime();
 
             $product->setName($productName);
             $product->setPrice($productPrice);
             $product->setDescription($productDescription);
             $product->setAddTime($productAddDate);
-            $product->setCategoryId($productCategory);
+            $product->setSubCategoryId($productSubCategory);
+            $product->setQuantity(0);
 
 
             $em = $this->getDoctrine()->getManager();
@@ -273,7 +265,7 @@ class DataController extends Controller
     /**
      * @Route("/cart/add/{id}", name="addToCart")
      */
-    public function addTCartAction($id)
+    public function addToCartAction($id)
     {
         $userId = $this->getUser()->getId();
         $record = $this->getDoctrine()->getRepository('AppBundle:Cart')->findOneBy(
@@ -377,6 +369,10 @@ class DataController extends Controller
                 }
                 else
                 {
+                    $this->addFlash(
+                        'noDelivery',
+                        'Musisz wybrać opcję dostawy!'
+                    );
                     return $this->redirectToRoute('cart');
                 }
             }
@@ -510,6 +506,38 @@ class DataController extends Controller
             'orderDetails' => $orderDetails,
             'sum' => $sum,
             'order' => $order
+        ));
+    }
+
+    /**
+     * @Route("/admin")
+     */
+    public function adminAction()
+    {
+        return new Response('<html><body>Admin page!</body></html>');
+    }
+
+    /**
+     * @Route("/admin/orders", name="adminOrders")
+     */
+    public function ordersAdminAction()
+    {
+        $orders = $this->getDoctrine()->getRepository('AppBundle:Orders')->findAll();
+
+        return $this->render('default/orderListAdmin.html.twig', array(
+            'orders' => $orders
+        ));
+    }
+
+    /**
+     * @Route("/admin/users", name="adminUsers")
+     */
+    public function usersAdminAction()
+    {
+        $users = $this->getDoctrine()->getRepository('AppBundle:User')->findAll();
+
+        return $this->render('default/users.html.twig', array(
+            'users' => $users
         ));
     }
 
