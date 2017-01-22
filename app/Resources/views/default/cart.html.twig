@@ -38,6 +38,7 @@
                     <th>#</th>
                     <th>Nazwa produktu:</th>
                     <th>Ilość:</th>
+                    <th>Na stanie:</th>
                     <th>Cena:</th>
                     <th>Łacznie:</th>
                     <th></th>
@@ -47,6 +48,7 @@
                         <th>{{ loop.index }}.</th>
                         <th>{{ cart.product.name }}</th>
                         <th><input type="text" name="quantity_{{ cart.id }}" value="{{ cart.quantity }}"/></th>
+                        <th>{{ cart.product.quantity }}</th>
                         <th>{{ cart.product.price }}</th>
                         <th>{{ cart.finalPrice }} PLN</th>
                         <th><a href="{{ path('deleteFromCart', {'id': cart.product.id}) }}" class="btn btn-danger">Usuń</a> </th>

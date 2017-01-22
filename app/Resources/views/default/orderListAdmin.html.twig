@@ -16,11 +16,11 @@
         {% for order in orders %}
             <tr>
                 <td>{{ loop.index }}</td>
-                <td><a href="{{ path('orderDetails', {'id': order.id}) }}">{{ order.id }}</a></td>
+                <td><a href="{{ path('adminOrdersDetails', {'id': order.id}) }}">{{ order.id }}</a></td>
                 <td><a href="#">{{ order.user.username}}</a></td>
                 <td>{{ order.orderTime|date("d.m.y H:i:s") }}</td>
                 <td>{{ order.status }}</td>
-                <td><a href="{{ path('orderDetails', {'id': order.id}) }}" class="btn btn-default">Szczegóły</a> </td>
+                <td><a href="{{ path('adminOrdersDetails', {'id': order.id}) }}" class="btn btn-default">Szczegóły</a> </td>
             </tr>
         {% endfor %}
         </table>

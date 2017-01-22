@@ -6,8 +6,11 @@ use AppBundle\Entity\Cart;
 use AppBundle\Entity\OrderedProducts;
 use AppBundle\Entity\Orders;
 use AppBundle\Entity\Sample;
+use AppBundle\Entity\Supply;
+use AppBundle\Entity\SupplyProducts;
 use AppBundle\Form\EditProductForm;
 use AppBundle\Form\OrderForm;
+use AppBundle\Form\SupplyForm;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -446,12 +449,36 @@ class DataController extends Controller
                     ->setProductPrice($productPrice)
                     ->setProductQuantity($quantity);
 
+                $productQuantity = $product->getQuantity();
+
+                if($productQuantity >= $quantity)
+                    {
+                        $orderProduct
+                            ->setProductStatus('Dostępny, zarezerwowany')
+                            ->setProductReserved($quantity);
+                        $finalQuantity = $productQuantity - $quantity;
+                        $product->setQuantity($finalQuantity);
+                    }
+                else if($productQuantity !== 0)
+                    {
+                        $orderProduct
+                            ->setProductStatus('Częściowa rezerwacja, oczekuje na dostawę')
+                            ->setProductReserved($productQuantity);
+                        $product->setQuantity(0);
+                    }
+                else
+                    {
+                        $orderProduct
+                            ->setProductStatus('Brak towaru, oczekuje na dostawę')
+                            ->setProductReserved(0);
+                    }
+
                 $em->persist($orderProduct);
                 $em->remove($cart);
                 $em->flush();
             }
 
-            $order->setStatus('pending');
+            $order->setStatus('Oczekuje na wpłatę');
             $em->flush();
 
             return $this->redirectToRoute('orderList');
@@ -530,6 +557,36 @@ class DataController extends Controller
     }
 
     /**
+     * @Route("/admin/orders/details/{id}", name="adminOrdersDetails")
+     */
+    public function ordersDetailsAdminAction($id)
+    {
+        $order = $this->getDoctrine()->getRepository('AppBundle:Orders')->findOneBy(array(
+            'id' => $id
+        ));
+        $orderDetails = $this->getDoctrine()->getRepository('AppBundle:OrderedProducts')->findBy(array(
+            'orderId' => $id
+        ));
+
+        $sum = $order->getDelivery()->getPrice();
+
+        foreach ($orderDetails as $orderDetail)
+        {
+            $quantity = $orderDetail->getProductQuantity();
+            $price = $orderDetail->getProductPrice();
+            $finalPrice = $quantity * $price;
+            $orderDetail->setFinalPrice($finalPrice);
+            $sum += $finalPrice;
+        }
+
+        return $this->render('default/orderDetailsAdmin.html.twig', array(
+            'order' => $order,
+            'orderDetails' => $orderDetails,
+            'sum' => $sum
+        ));
+    }
+
+    /**
      * @Route("/admin/users", name="adminUsers")
      */
     public function usersAdminAction()
@@ -539,6 +596,37 @@ class DataController extends Controller
         return $this->render('default/users.html.twig', array(
             'users' => $users
         ));
+    }
+
+    /**
+     * @Route("/admin/supply", name="adminSupply")
+     */
+    public function supplyAdminAction(Request $request)
+    {
+        $supply = new Supply();
+
+        $form = $this->createForm(SupplyForm::class);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid())
+            {
+                $document = $form->get('document')->getData();
+                $productId = $form->get('product1')->getData();
+
+
+                $supply
+                    ->setDocument($document)
+                    ->setDate(new \DateTime())
+                    ->setUserId(1);
+
+                $supplyProducts = new SupplyProducts();
+                $supplyProducts
+                    ->setSupplyId($supply)->setProductId($productId);
+            }
+
+        return $this->render('default/supply.html.twig', array(
+            'form' => $form->createView()
+        ));
+
     }
 
     /**

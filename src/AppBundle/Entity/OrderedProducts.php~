@@ -50,6 +50,20 @@ class OrderedProducts
     private $productQuantity;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="productStatus", type="string", length=255)
+     */
+    private $productStatus;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="productReserved", type="integer")
+     */
+    private $productReserved;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Orders", inversedBy="orderedProduct")
      * @ORM\JoinColumn(name="orderId", referencedColumnName="id")
      */
@@ -233,4 +247,52 @@ class OrderedProducts
         $this->finalPrice = $finalPrice;
     }
 
+
+    /**
+     * Set productStatus
+     *
+     * @param string $productStatus
+     *
+     * @return OrderedProducts
+     */
+    public function setProductStatus($productStatus)
+    {
+        $this->productStatus = $productStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get productStatus
+     *
+     * @return string
+     */
+    public function getProductStatus()
+    {
+        return $this->productStatus;
+    }
+
+    /**
+     * Set productReserved
+     *
+     * @param integer $productReserved
+     *
+     * @return OrderedProducts
+     */
+    public function setProductReserved($productReserved)
+    {
+        $this->productReserved = $productReserved;
+
+        return $this;
+    }
+
+    /**
+     * Get productReserved
+     *
+     * @return integer
+     */
+    public function getProductReserved()
+    {
+        return $this->productReserved;
+    }
 }

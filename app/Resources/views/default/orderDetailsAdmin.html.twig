@@ -10,7 +10,6 @@
                 <td>Nazwa Produktu:</td>
                 <td>Cena:</td>
                 <td>Zamówiana ilość:</td>
-                <td>Zarezerwowano sztuk:</td>
                 <td>Wartość:</td>
                 <td>Dostępność Produktu:</td>
             </tr>
@@ -20,7 +19,6 @@
                     <td><a href="{{ path('shopproductinfo', {'id': orderDetail.product.id}) }}" target="_blank">{{ orderDetail.product.name }}</a></td>
                     <td>{{ orderDetail.productPrice }} PLN</td>
                     <td>{{ orderDetail.productQuantity }}</td>
-                    <td>{{ orderDetail.productReserved }}</td>
                     <td>{{ orderDetail.finalPrice }} PLN</td>
                     <td>{{ orderDetail.productStatus }}</td>
                 </tr>
@@ -32,10 +30,8 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
             </tr>
             <tr>
-                <td></td>
                 <td></td>
                 <td></td>
                 <td>Sposób dostawy:</td>
@@ -50,10 +46,8 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
             </tr>
             <tr>
-                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -62,7 +56,6 @@
                 <td></td>
             </tr>
             <tr>
-                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
