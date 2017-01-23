@@ -1,6 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-{{ form_start(form) }}
-{{ form_end(form) }}
+    {{ form_start(form) }}
+    {{ form_row(form.document) }}
+
+    <h3>Products</h3>
+    <ul class="products">
+        {% for supplyProduct in form.supplyProducts %}
+            <li>{{ form_row(supplyProduct.productPrice) }}</li>
+        {% endfor %}
+    </ul>
+    {{ form_end(form) }}
 {% endblock body %}

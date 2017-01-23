@@ -10,7 +10,7 @@ use AppBundle\Entity\Supply;
 use AppBundle\Entity\SupplyProducts;
 use AppBundle\Form\EditProductForm;
 use AppBundle\Form\OrderForm;
-use AppBundle\Form\SupplyForm;
+use AppBundle\Form\Type\SupplyForm;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -605,23 +605,20 @@ class DataController extends Controller
     {
         $supply = new Supply();
 
-        $form = $this->createForm(SupplyForm::class);
+        $supplyProduct1 = new SupplyProducts();
+        $supplyProduct1->setProductPrice('20');
+        $supply->getSupplyProducts()->add($supplyProduct1);
+        $supplyProduct2 = new SupplyProducts();
+        $supplyProduct2->setProductPrice('30');
+        $supply->getSupplyProducts()->add($supplyProduct2);
+
+        $form = $this->createForm(SupplyForm::class, $supply);
         $form->handleRequest($request);
+
         if($form->isSubmitted() && $form->isValid())
-            {
-                $document = $form->get('document')->getData();
-                $productId = $form->get('product1')->getData();
+        {
 
-
-                $supply
-                    ->setDocument($document)
-                    ->setDate(new \DateTime())
-                    ->setUserId(1);
-
-                $supplyProducts = new SupplyProducts();
-                $supplyProducts
-                    ->setSupplyId($supply)->setProductId($productId);
-            }
+        }
 
         return $this->render('default/supply.html.twig', array(
             'form' => $form->createView()

@@ -106,9 +106,15 @@ class Products
      */
     private $quantity;
 
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\SupplyProducts", mappedBy="product")
+     */
+    private $supplyProducts;
+
 
     public function __construct()
     {
+        $this->supplyProducts = new ArrayCollection();
         $this->cart = new ArrayCollection();
         $this->orderedProducts = new ArrayCollection();
     }
@@ -359,5 +365,39 @@ class Products
     public function getQuantity()
     {
         return $this->quantity;
+    }
+
+    /**
+     * Add supplyProduct
+     *
+     * @param \AppBundle\Entity\SupplyProducts $supplyProduct
+     *
+     * @return Products
+     */
+    public function addSupplyProduct(\AppBundle\Entity\SupplyProducts $supplyProduct)
+    {
+        $this->supplyProducts[] = $supplyProduct;
+
+        return $this;
+    }
+
+    /**
+     * Remove supplyProduct
+     *
+     * @param \AppBundle\Entity\SupplyProducts $supplyProduct
+     */
+    public function removeSupplyProduct(\AppBundle\Entity\SupplyProducts $supplyProduct)
+    {
+        $this->supplyProducts->removeElement($supplyProduct);
+    }
+
+    /**
+     * Get supplyProducts
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSupplyProducts()
+    {
+        return $this->supplyProducts;
     }
 }

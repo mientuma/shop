@@ -56,6 +56,12 @@ class SupplyProducts
     private $supply;
 
     /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Products", inversedBy="supplyProducts")
+     * @ORM\JoinColumn(name="productId", referencedColumnName="id")
+     */
+    private $product;
+
+    /**
      * Get id
      *
      * @return int
@@ -183,5 +189,29 @@ class SupplyProducts
     public function getSupply()
     {
         return $this->supply;
+    }
+
+    /**
+     * Set product
+     *
+     * @param \AppBundle\Entity\Products $product
+     *
+     * @return SupplyProducts
+     */
+    public function setProduct(\AppBundle\Entity\Products $product = null)
+    {
+        $this->product = $product;
+
+        return $this;
+    }
+
+    /**
+     * Get product
+     *
+     * @return \AppBundle\Entity\Products
+     */
+    public function getProduct()
+    {
+        return $this->product;
     }
 }

@@ -135,4 +135,38 @@ class Supply
     {
         return $this->userId;
     }
+
+    /**
+     * Add supplyProduct
+     *
+     * @param \AppBundle\Entity\SupplyProducts $supplyProduct
+     *
+     * @return Supply
+     */
+    public function addSupplyProduct(\AppBundle\Entity\SupplyProducts $supplyProduct)
+    {
+        $this->supplyProducts[] = $supplyProduct;
+
+        return $this;
+    }
+
+    /**
+     * Remove supplyProduct
+     *
+     * @param \AppBundle\Entity\SupplyProducts $supplyProduct
+     */
+    public function removeSupplyProduct(\AppBundle\Entity\SupplyProducts $supplyProduct)
+    {
+        $this->supplyProducts->removeElement($supplyProduct);
+    }
+
+    /**
+     * Get supplyProducts
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSupplyProducts()
+    {
+        return $this->supplyProducts;
+    }
 }
