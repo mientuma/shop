@@ -22,7 +22,8 @@ class SupplyForm extends AbstractType
         $builder->add('document');
 
         $builder->add('supplyProducts', CollectionType::class, array(
-            'entry_type' => SupplyProductsForm::class
+            'entry_type' => SupplyProductsForm::class,
+            'allow_add' => true,
         ));
     }
 

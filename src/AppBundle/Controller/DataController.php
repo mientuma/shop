@@ -605,13 +605,6 @@ class DataController extends Controller
     {
         $supply = new Supply();
 
-        $supplyProduct1 = new SupplyProducts();
-        $supplyProduct1->setProductPrice('20');
-        $supply->getSupplyProducts()->add($supplyProduct1);
-        $supplyProduct2 = new SupplyProducts();
-        $supplyProduct2->setProductPrice('30');
-        $supply->getSupplyProducts()->add($supplyProduct2);
-
         $form = $this->createForm(SupplyForm::class, $supply);
         $form->handleRequest($request);
 

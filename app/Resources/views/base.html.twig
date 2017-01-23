@@ -6,6 +6,8 @@
     <title>{% block title %}Welcome!{% endblock %}</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('bootstrap/dist/css/bootstrap.min.css') }}" />
+    <script src="{{ asset('jquery/dist/jquery.min.js') }}"></script>
+    <script src="{{ asset('bootstrap/dist/js/bootstrap.min.js') }}"></script>
     {% block stylesheets %}{% endblock %}
     <style>
         body
@@ -23,10 +25,6 @@
         {% endblock topnav %}
         {% block body %}{% endblock %}
     </div>
-
-    {% block javascripts %}{% endblock %}
-        <script src="{{ asset('jquery/dist/jquery.min.js') }}"></script>
-        <script src="{{ asset('bootstrap/dist/js/bootstrap.min.js') }}"></script>
 
 </body>
 </html>
