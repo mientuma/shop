@@ -643,6 +643,6 @@ class DataController extends Controller
         return $this->render('default/supply.html.twig', array(
             'form' => $form->createView()
         ));
-
     }
+
 }
