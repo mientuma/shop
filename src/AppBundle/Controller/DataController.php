@@ -2,10 +2,10 @@
 
 namespace AppBundle\Controller;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Cart;
 use AppBundle\Entity\OrderedProducts;
 use AppBundle\Entity\Orders;
-use AppBundle\Entity\Sample;
 use AppBundle\Entity\Supply;
 use AppBundle\Entity\SupplyProducts;
 use AppBundle\Form\EditProductForm;
@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Form\LoginForm;
 use AppBundle\Form\RegistrationForm;
 use AppBundle\Form\ProductForm;
-use AppBundle\Form\SampleForm;
 use AppBundle\Entity\Login;
 use AppBundle\Entity\Users;
 use AppBundle\Entity\Products;
@@ -610,29 +609,41 @@ class DataController extends Controller
 
         if($form->isSubmitted() && $form->isValid())
         {
+            $document = $form->get('document')->getData();
+            $date = new \DateTime();
+            $supply->setDate($date)->setDocument($document)->setUserId(1);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($supply);
+            $em->flush();
 
+            $arr = new ArrayCollection();
+            $arr = $form->get('supplyProducts')->getData()->toArray();
+
+            $repository = $this->getDoctrine()->getRepository('AppBundle:Products');
+
+            foreach($arr as $inc)
+            {
+                $id = $inc->getProduct()->getId();
+                $product = $repository->findOneBy(array(
+                    'id' => $id
+                ));
+                $addedQuantity = $inc->getProductQuantity();
+                $originalQuantity = $product->getQuantity();
+                $newQuantity = $originalQuantity+$addedQuantity;
+                $product->setQuantity($newQuantity);
+                $em->persist($product);
+                $em->flush();
+            }
+            $this->addFlash(
+                'supplyNote',
+                'Dostawa została pomyślnie przyjęta!'
+            );
+            return $this->redirectToRoute('adminSupply');
         }
 
         return $this->render('default/supply.html.twig', array(
             'form' => $form->createView()
         ));
 
-    }
-
-    /**
-     * @Route("/sample", name="sample")
-     */
-    public function sampleAction()
-    {
-        $samples = $this->getDoctrine()->getRepository('AppBundle:Sample')->findAll();
-        foreach ($samples as $sample)
-        {
-            $sample->getName();
-        }
-
-        $form = $this->createForm(SampleForm::class, $sample);
-        return $this->render('default/sample.html.twig', array(
-            'form' => $form->createView()
-        ));
     }
 }

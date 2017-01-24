@@ -44,7 +44,7 @@ class Supply
     private $userId;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\SupplyProducts", mappedBy="supply")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\SupplyProducts", mappedBy="supply", cascade={"persist"})
      */
     private $supplyProducts;
 
@@ -145,7 +145,8 @@ class Supply
      */
     public function addSupplyProduct(\AppBundle\Entity\SupplyProducts $supplyProduct)
     {
-        $this->supplyProducts[] = $supplyProduct;
+        $supplyProduct->setSupply($this);
+        $this->supplyProducts->add($supplyProduct);
 
         return $this;
     }
