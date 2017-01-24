@@ -616,7 +616,6 @@ class DataController extends Controller
             $em->persist($supply);
             $em->flush();
 
-            $arr = new ArrayCollection();
             $arr = $form->get('supplyProducts')->getData()->toArray();
 
             $repository = $this->getDoctrine()->getRepository('AppBundle:Products');
