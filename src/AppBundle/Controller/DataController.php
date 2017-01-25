@@ -458,7 +458,7 @@ class DataController extends Controller
                         $finalQuantity = $productQuantity - $quantity;
                         $product->setQuantity($finalQuantity);
                     }
-                else if($productQuantity !== 0)
+                elseif($productQuantity !== 0)
                     {
                         $orderProduct
                             ->setProductStatus('Częściowa rezerwacja, oczekuje na dostawę')
@@ -620,6 +620,8 @@ class DataController extends Controller
 
             $repository = $this->getDoctrine()->getRepository('AppBundle:Products');
 
+            $productsId = array();
+
             foreach($arr as $inc)
             {
                 $id = $inc->getProduct()->getId();
@@ -632,7 +634,67 @@ class DataController extends Controller
                 $product->setQuantity($newQuantity);
                 $em->persist($product);
                 $em->flush();
+
+                $productsId[] .= $id;
             }
+
+            $orders = $this->getDoctrine()->getRepository('AppBundle:Orders')->findBy(
+                array('status' => 'Oczekuje na wpłatę'),
+                array('orderTime' => 'ASC')
+            );
+
+            $ordersId = array();
+            foreach ($orders as $order)
+            {
+                $id = $order->getId();
+                $ordersId[] .= $id;
+            }
+
+            $orderedProducts = $this->getDoctrine()->getRepository('AppBundle:OrderedProducts')->findBy(
+                array(
+                    'orderId' => ($ordersId),
+                    'productId' => ($productsId),
+                    'productStatus' => array('Towar częściowo zarezerwowany', 'Brak towaru, oczekuje na dostawę')
+                )
+            );
+
+            foreach ($orderedProducts as $orderedProduct)
+            {
+                $product = $orderedProduct->getProduct();
+                $quantity = $orderedProduct->getProductQuantity();
+                $reservation = $orderedProduct->getProductReserved();
+                $difference = $quantity - $reservation;
+                $databaseQuantity = $this->getDoctrine()->getRepository('AppBundle:Products')->find($product)->getQuantity();
+
+                if($databaseQuantity >= $difference)
+                {
+                    $newProductValue = $databaseQuantity-$difference;
+                    $product->setQuantity($newProductValue);
+
+                    $orderedProduct->setProductReserved($quantity);
+                    $orderedProduct->setProductStatus('Towar zarezerwowany');
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($product);
+                    $em->persist($orderedProduct);
+                    $em->flush();
+                }
+                elseif($databaseQuantity == 0)
+                {
+                    break 1;
+                }
+                else
+                {
+                    $newReservation = $reservation + $databaseQuantity;
+                    $orderedProduct->setProductReserved($newReservation);
+                    $orderedProduct->setProductStatus('Towar częściowo zarezerwowany');
+                    $product->setQuantity(0);
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($orderedProduct);
+                    $em->persist($product);
+                    $em->flush();
+                }
+            }
+
             $this->addFlash(
                 'supplyNote',
                 'Dostawa została pomyślnie przyjęta!'
@@ -644,5 +706,4 @@ class DataController extends Controller
             'form' => $form->createView()
         ));
     }
-
 }
