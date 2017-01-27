@@ -26,7 +26,7 @@ use AppBundle\Form\UserType;
 use AppBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Session\Session;
 
-class DataController extends Controller
+class DataController extends BaseController
 {
     /**
      * @Route("/", name="homepage")
@@ -75,7 +75,7 @@ class DataController extends Controller
             $product->setQuantity(0);
 
 
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEntityManager();
             $em->persist($product);
             $em->flush();
             $this->addFlash(
@@ -125,7 +125,7 @@ class DataController extends Controller
             $productDescription = $editForm->get('description')->getData();
             $productCategory = $editForm->get('category')->getData();
 
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEntityManager();
             $product = $em->getRepository('AppBundle:Products')->find($id);
 
             $product->setName($productName);
@@ -151,7 +151,7 @@ class DataController extends Controller
      */
     public function deleteProductAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEntityManager();
         $product = $em->getRepository('AppBundle:Products')->find($id);
         $em->remove($product);
         $em->flush();
@@ -168,7 +168,7 @@ class DataController extends Controller
      */
     public function shopAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEntityManager();
         $dql = "SELECT p FROM AppBundle:Products p";
         $query = $em->createQuery($dql);
         $paginator = $this->get('knp_paginator');
@@ -223,7 +223,7 @@ class DataController extends Controller
                 $sum = null;
                 $deliveryOptions = $this->getDoctrine()->getRepository('AppBundle:Delivery')->findAll();
 
-                $em = $this->getDoctrine()->getManager();
+                $em = $this->getEntityManager();
                 foreach($carts as $cart)
                 {
                     $cartId = $cart->getId();
@@ -284,7 +284,7 @@ class DataController extends Controller
         $cart->setProduct($product);
         $cart->setQuantity(1);
 
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEntityManager();
         $em->persist($cart);
         $em->flush();
         return $this->redirectToRoute('cart');
@@ -296,7 +296,7 @@ class DataController extends Controller
     public function deleteFromCartAction($id)
     {
         $userId = $this->getUser()->getId();
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEntityManager();
         $cartProduct = $this->getDoctrine()->getRepository('AppBundle:Cart')->findOneBy(
             array('userId' => $userId, 'productId' => $id));
         $em->remove($cartProduct);
@@ -317,7 +317,7 @@ class DataController extends Controller
         $userId = $this->getUser()->getId();
         $cartProducts = $this->getDoctrine()->getRepository('AppBundle:Cart')->findByuserId($userId);
 
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEntityManager();
         foreach($cartProducts as $cartProduct)
         {
             $em->remove($cartProduct);
@@ -421,7 +421,7 @@ class DataController extends Controller
                 ->setOrderTime($orderTime)
                 ->setStatus($status);
 
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEntityManager();
             $em->persist($order);
             $em->flush();
 
@@ -612,7 +612,7 @@ class DataController extends Controller
             $document = $form->get('document')->getData();
             $date = new \DateTime();
             $supply->setDate($date)->setDocument($document)->setUserId(1);
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getEntityManager();
             $em->persist($supply);
             $em->flush();
 
