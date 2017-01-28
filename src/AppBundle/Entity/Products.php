@@ -204,14 +204,11 @@ class Products
     /**
      * Set addTime
      *
-     * @param \DateTime $addTime
-     *
      * @return Products
      */
-    public function setAddTime($addTime)
+    public function setAddTime()
     {
-        $this->addTime = $addTime;
-
+        $this->addTime = new \DateTime();
         return $this;
     }
 
@@ -400,4 +397,24 @@ class Products
     {
         return $this->supplyProducts;
     }
+
+
+
+
+
+
+
+
+
+    public function setDefaultQuantity()
+    {
+        $this->quantity = 0;
+        return $this;
+    }
+
+    public function setDefaultValues()
+    {
+        $this->setDefaultQuantity()->setAddTime();
+    }
+
 }

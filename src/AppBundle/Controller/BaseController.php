@@ -21,4 +21,5 @@ abstract class BaseController extends Controller
         $em = $this->getDoctrine()->getManager();
         return $em;
     }
+
 }

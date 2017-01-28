@@ -54,6 +54,8 @@ class Cart
      */
     private $user;
 
+    private $sum;
+
     private $finalPrice;
 
 
@@ -202,6 +204,5 @@ class Cart
     {
         $this->finalPrice = $finalPrice;
     }
-
-
+    
 }

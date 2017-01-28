@@ -61,19 +61,8 @@ class DataController extends BaseController
 
         if($productForm->isSubmitted() && $productForm->isValid())
         {
-            $productName = $productForm->get('name')->getData();
-            $productPrice = $productForm->get('price')->getData();
-            $productDescription = $productForm->get('description')->getData();
-            $productSubCategory = $productForm->get('subCategory')->getData();
-            $productAddDate = new \DateTime();
-
-            $product->setName($productName);
-            $product->setPrice($productPrice);
-            $product->setDescription($productDescription);
-            $product->setAddTime($productAddDate);
-            $product->setSubCategoryId($productSubCategory);
-            $product->setQuantity(0);
-
+            $product->setDefaultValues();
+            $product = $productForm->getData();
 
             $em = $this->getEntityManager();
             $em->persist($product);
@@ -82,11 +71,8 @@ class DataController extends BaseController
                 'addNote',
                 'Produkt został pomyślnie dodany!'
             );
-
             return $this->redirectToRoute('showproducts');
-
         }
-
         return $this->render('default/addProduct/AddProducts.html.twig', array(
             'productForm' => $productForm->createView(),
         ));
@@ -98,6 +84,10 @@ class DataController extends BaseController
     public function showProductDetailsAction($id)
     {
         $product = $this->getDoctrine()->getRepository('AppBundle:Products')->find($id);
+        if(!$product)
+        {
+            throw $this->createNotFoundException();
+        }
         return $this->render('default/showProductDetails/showProductDetails.html.twig', array(
             'product' => $product
         ));
@@ -110,29 +100,14 @@ class DataController extends BaseController
     {
         $product = $this->getDoctrine()->getRepository('AppBundle:Products')->find($id);
 
-        $product->getName();
-        $product->getPrice();
-        $product->getDescription();
-        $product->getCategoryId();
-
         $editForm = $this->createForm(EditProductForm::class, $product);
 
         $editForm->handleRequest($request);
         if($editForm->isSubmitted() && $editForm->isValid())
         {
-            $productName = $editForm->get('name')->getData();
-            $productPrice = $editForm->get('price')->getData();
-            $productDescription = $editForm->get('description')->getData();
-            $productCategory = $editForm->get('category')->getData();
-
             $em = $this->getEntityManager();
             $product = $em->getRepository('AppBundle:Products')->find($id);
-
-            $product->setName($productName);
-            $product->setPrice($productPrice);
-            $product->setDescription($productDescription);
-            $product->setCategoryId($productCategory);
-
+            $product = $editForm->getData();
             $em->flush();
             $this->addFlash(
                 'editNote',
@@ -143,7 +118,6 @@ class DataController extends BaseController
         return $this->render('default/editProduct/editProduct.html.twig', array(
             'editForm' => $editForm->createView(),
         ));
-
     }
 
     /**
@@ -184,17 +158,6 @@ class DataController extends BaseController
     }
 
     /**
-     * @Route("/shop/page/{id}", name="shopPage")
-     */
-    public function shopPageAction()
-    {
-        $products = $this->getDoctrine()->getRepository('AppBundle:Products')->findAll();
-        return $this->render('default/shop.html.twig', array(
-            'products' => $products
-        ));
-    }
-
-    /**
      * @Route("/shop/details/{id}", name="shopproductinfo")
      */
     public function showProductInfoAction($id)
@@ -211,7 +174,9 @@ class DataController extends BaseController
     public function cartAction(Request $request)
     {
         $userId = $this->getUser()->getId();
-        $carts = $this->getDoctrine()->getRepository('AppBundle:Cart')->findByuserId($userId);
+        $carts = $this->getDoctrine()->getRepository('AppBundle:Cart')->findBy(array(
+            'userId' => $userId
+        ));
         if (!$carts)
         {
             return new Response('<html><body>Twój koszyk jest pusty!</body></html>');
