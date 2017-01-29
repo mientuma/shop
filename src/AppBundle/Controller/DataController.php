@@ -61,7 +61,6 @@ class DataController extends BaseController
 
         if($productForm->isSubmitted() && $productForm->isValid())
         {
-            $product->setDefaultValues();
             $product = $productForm->getData();
 
             $em = $this->getEntityManager();

@@ -114,6 +114,8 @@ class Products
 
     public function __construct()
     {
+        $this->quantity = 0;
+        $this->addTime = new \DateTime();
         $this->supplyProducts = new ArrayCollection();
         $this->cart = new ArrayCollection();
         $this->orderedProducts = new ArrayCollection();
@@ -206,9 +208,10 @@ class Products
      *
      * @return Products
      */
-    public function setAddTime()
+    public function setAddTime($addTime)
     {
-        $this->addTime = new \DateTime();
+        $this->addTime = $addTime;
+
         return $this;
     }
 
@@ -396,25 +399,6 @@ class Products
     public function getSupplyProducts()
     {
         return $this->supplyProducts;
-    }
-
-
-
-
-
-
-
-
-
-    public function setDefaultQuantity()
-    {
-        $this->quantity = 0;
-        return $this;
-    }
-
-    public function setDefaultValues()
-    {
-        $this->setDefaultQuantity()->setAddTime();
     }
 
 }

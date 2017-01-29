@@ -54,8 +54,6 @@ class Cart
      */
     private $user;
 
-    private $sum;
-
     private $finalPrice;
 
 
