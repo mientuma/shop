@@ -202,6 +202,5 @@ class Cart
     {
         $this->finalPrice = $finalPrice;
     }
-
-
+    
 }

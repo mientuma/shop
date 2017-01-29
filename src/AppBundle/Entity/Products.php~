@@ -114,6 +114,8 @@ class Products
 
     public function __construct()
     {
+        $this->quantity = 0;
+        $this->addTime = new \DateTime();
         $this->supplyProducts = new ArrayCollection();
         $this->cart = new ArrayCollection();
         $this->orderedProducts = new ArrayCollection();
@@ -203,8 +205,6 @@ class Products
 
     /**
      * Set addTime
-     *
-     * @param \DateTime $addTime
      *
      * @return Products
      */
@@ -400,4 +400,5 @@ class Products
     {
         return $this->supplyProducts;
     }
+
 }
