@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -56,6 +57,12 @@ class Cart
 
     private $finalPrice;
 
+    public function __construct($user, $product)
+    {
+        $this->quantity = 1;
+        $this->user = $user;
+        $this->product = $product;
+    }
 
     /**
      * Get id
@@ -202,5 +209,21 @@ class Cart
     {
         $this->finalPrice = $finalPrice;
     }
+
+    /**
+     *
+     *
+     *
+     *
+     *
+     * CUSTOM METHODS
+     *
+     *
+     *
+     *
+     *
+     */
+
+
     
 }

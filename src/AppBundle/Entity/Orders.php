@@ -104,6 +104,7 @@ class Orders
 
     public function __construct()
     {
+        $this->orderTime = new \DateTime();
         $this->orderedProduct = new ArrayCollection();
     }
 

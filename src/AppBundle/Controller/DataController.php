@@ -3,7 +3,6 @@
 namespace AppBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use AppBundle\Entity\Cart;
 use AppBundle\Entity\OrderedProducts;
 use AppBundle\Entity\Orders;
 use AppBundle\Entity\Supply;
@@ -13,18 +12,14 @@ use AppBundle\Form\OrderForm;
 use AppBundle\Form\Type\SupplyForm;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Form\LoginForm;
-use AppBundle\Form\RegistrationForm;
 use AppBundle\Form\ProductForm;
-use AppBundle\Entity\Login;
-use AppBundle\Entity\Users;
 use AppBundle\Entity\Products;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Form\UserType;
 use AppBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Session\Session;
+use AppBundle\Entity\Cart;
 
 class DataController extends BaseController
 {
@@ -243,10 +238,7 @@ class DataController extends BaseController
         }
         $product = $this->getDoctrine()->getRepository('AppBundle:Products')->findOneByid($id);
         $user = $this->getUser();
-        $cart = new Cart();
-        $cart->setUser($user);
-        $cart->setProduct($product);
-        $cart->setQuantity(1);
+        $cart = new Cart($user, $product);
 
         $em = $this->getEntityManager();
         $em->persist($cart);
@@ -364,36 +356,19 @@ class DataController extends BaseController
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid())
         {
+            $order = $form->getData();
             $deliveryId = $this->get('session')->get('deliveryId');
-            $address = $form->get('address')->getData();
-            $city = $form->get('city')->getData();
-            $postCode = $form->get('postCode')->getData();
-            $receiver = $form->get('receiver')->getData();
-            $receiverPhoneNumber = $form->get('receiverPhoneNumber')->getData();
             $delivery = $this->getDoctrine()->getRepository('AppBundle:Delivery')->find($deliveryId);
-            $orderTime = new \DateTime();
             $status = 'inProgress';
 
             $order
                 ->setUser($user)
-                ->setAddress($address)
-                ->setCity($city)
-                ->setPostCode($postCode)
-                ->setReceiver($receiver)
-                ->setReceiverPhoneNumber($receiverPhoneNumber)
                 ->setDelivery($delivery)
-                ->setOrderTime($orderTime)
                 ->setStatus($status);
 
             $em = $this->getEntityManager();
             $em->persist($order);
             $em->flush();
-
-            $order = $this->getDoctrine()->getRepository('AppBundle:Orders')->findOneBy(array(
-                'user' => $user, 'address' => $address, 'city' => $city, 'postCode' => $postCode,
-                'receiver' => $receiver, 'receiverPhoneNumber' => $receiverPhoneNumber, 'orderTime' =>
-                $orderTime, 'status' => $status
-            ));
 
             $carts = $this->getDoctrine()->getRepository('AppBundle:Cart')->findBy(array(
                 'user' => $user
@@ -470,6 +445,8 @@ class DataController extends BaseController
 
     /**
      * @Route("/order/details/{id}", name="orderDetails")
+     * @param $id
+     * @return Response
      */
     public function orderDetailsAction($id)
     {
@@ -485,11 +462,8 @@ class DataController extends BaseController
 
         foreach ($orderDetails as $orderDetail)
         {
-            $quantity = $orderDetail->getProductQuantity();
-            $price = $orderDetail->getProductPrice();
-            $finalPrice = $quantity * $price;
-            $orderDetail->setFinalPrice($finalPrice);
-            $sum += $finalPrice;
+            $orderDetail->countOrderValue();
+            $sum += $orderDetail->getFinalPrice();
         }
 
         return $this->render('default/orderDetails.html.twig', array(
@@ -530,16 +504,13 @@ class DataController extends BaseController
         $orderDetails = $this->getDoctrine()->getRepository('AppBundle:OrderedProducts')->findBy(array(
             'orderId' => $id
         ));
-
+        $newOrder = new OrderedProducts();
         $sum = $order->getDelivery()->getPrice();
 
         foreach ($orderDetails as $orderDetail)
         {
-            $quantity = $orderDetail->getProductQuantity();
-            $price = $orderDetail->getProductPrice();
-            $finalPrice = $quantity * $price;
-            $orderDetail->setFinalPrice($finalPrice);
-            $sum += $finalPrice;
+            $orderDetail->countOrderValue();
+            $sum += $orderDetail->getFinalPrice();
         }
 
         return $this->render('default/orderDetailsAdmin.html.twig', array(
@@ -574,15 +545,14 @@ class DataController extends BaseController
         if($form->isSubmitted() && $form->isValid())
         {
             $document = $form->get('document')->getData();
-            $date = new \DateTime();
-            $supply->setDate($date)->setDocument($document)->setUserId(1);
+            $supply->setDocument($document)->setUserId(1);
             $em = $this->getEntityManager();
             $em->persist($supply);
             $em->flush();
 
-            $arr = $form->get('supplyProducts')->getData()->toArray();
-
             $repository = $this->getDoctrine()->getRepository('AppBundle:Products');
+
+            $arr = $form->get('supplyProducts')->getData()->toArray();
 
             $productsId = array();
 
@@ -594,8 +564,7 @@ class DataController extends BaseController
                 ));
                 $addedQuantity = $inc->getProductQuantity();
                 $originalQuantity = $product->getQuantity();
-                $newQuantity = $originalQuantity+$addedQuantity;
-                $product->setQuantity($newQuantity);
+                $product->updateQuantity($originalQuantity, $addedQuantity);
                 $em->persist($product);
                 $em->flush();
 

@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class OrderedProducts
 {
+
     /**
      * @var int
      *
@@ -294,5 +295,13 @@ class OrderedProducts
     public function getProductReserved()
     {
         return $this->productReserved;
+    }
+
+    public function countOrderValue()
+    {
+        $quantity = $this->getProductQuantity();
+        $price = $this->getProductPrice();
+        $finalPrice = $quantity*$price;
+        $this->setFinalPrice($finalPrice);
     }
 }

@@ -22,4 +22,13 @@ abstract class BaseController extends Controller
         return $em;
     }
 
+    /**
+     * @return \AppBundle\Repository\ProductsRepository|\Doctrine\Common\Persistence\ObjectRepository
+     */
+    public function getProductRepository()
+    {
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Products');
+        return $repository;
+    }
+
 }

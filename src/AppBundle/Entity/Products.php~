@@ -111,6 +111,8 @@ class Products
      */
     private $supplyProducts;
 
+    private $addedQuantity;
+
 
     public function __construct()
     {
@@ -399,6 +401,22 @@ class Products
     public function getSupplyProducts()
     {
         return $this->supplyProducts;
+    }
+
+    public function getAddedQuantity()
+    {
+        return $this->addedQuantity;
+    }
+
+    public function setAddedQuantity($addedQuantity)
+    {
+        $this->addedQuantity = $addedQuantity;
+    }
+
+    public function updateQuantity($quantity, $addedQuantity)
+    {
+        $quantity = $quantity + $addedQuantity;
+        $this->setQuantity($quantity);
     }
 
 }

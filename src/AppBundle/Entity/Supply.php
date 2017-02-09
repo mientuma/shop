@@ -50,6 +50,7 @@ class Supply
 
     public function __construct()
     {
+        $this->date = new \DateTime();
         $this->supplyProducts = new ArrayCollection();
     }
 
