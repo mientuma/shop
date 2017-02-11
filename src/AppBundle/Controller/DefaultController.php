@@ -1,5 +1,6 @@
 <?php
 
+
 namespace AppBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -21,8 +22,16 @@ use AppBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Session\Session;
 use AppBundle\Entity\Cart;
 
-class DataController extends BaseController
+class DefaultController extends BaseController
 {
-
+    /**
+     * @Route("/", name="homepage")
+     */
+    public function indexAction()
+    {
+        {
+            return $this->render('default/index.html.twig');
+        }
+    }
 
 }
