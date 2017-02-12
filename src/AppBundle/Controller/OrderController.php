@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Mateusz
- * Date: 09.02.2017
- * Time: 19:01
- */
 
 namespace AppBundle\Controller;
 
@@ -146,8 +140,11 @@ class OrderController extends BaseController
             'orderId' => $id
         ));
 
-        $sum = $order->getDelivery()->getPrice();
+        $myservice = $this->get('querymanager');
+        $usernameId = $myservice->findUserByUsername('testuser');
+        dump($usernameId);
 
+        $sum = $order->getDelivery()->getPrice();
         foreach ($orderDetails as $orderDetail)
         {
             $orderDetail->countOrderValue();

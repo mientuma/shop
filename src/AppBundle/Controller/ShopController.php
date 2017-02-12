@@ -21,7 +21,7 @@ use AppBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Session\Session;
 use AppBundle\Entity\Cart;
 
-class ShopController
+class ShopController extends BaseController
 {
     /**
      * @Route("/shop/", name="shop")
