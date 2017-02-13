@@ -1,7 +1,10 @@
 parameters:
 
 services:
-  querymanager:
-    class: AppBundle\Utils\QueryManager
-    arguments: ["@doctrine.orm.entity_manager"]
+  orderservice:
+    class: AppBundle\Utils\OrderManager
+    arguments: ["@doctrine.orm.entity_manager", "@security.token_storage"]
 
+  orderedproductservice:
+    class: AppBundle\Utils\OrderedProductsManager
+    arguments: ["@doctrine.orm.entity_manager", "@products"]

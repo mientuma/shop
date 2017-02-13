@@ -112,14 +112,11 @@ class OrderController extends BaseController
 
     /**
      * @Route("/order/list", name="orderList")
+     * @return Response
      */
     public function orderListAction()
     {
-        $user = $this->getUser();
-        $orders = $this->getDoctrine()->getRepository('AppBundle:Orders')->findBy(array(
-            'user' => $user
-        ));
-
+        $orders = $this->get('orderservice')->getOrders();
         return $this->render('default/orderList.html.twig', array(
             'orders' => $orders
         ));
@@ -132,17 +129,8 @@ class OrderController extends BaseController
      */
     public function orderDetailsAction($id)
     {
-        $user = $this->getUser();
-        $order = $this->getDoctrine()->getRepository('AppBundle:Orders')->findOneBy(array(
-            'user' => $user, 'id' => $id
-        ));
-        $orderDetails = $this->getDoctrine()->getRepository('AppBundle:OrderedProducts')->findBy(array(
-            'orderId' => $id
-        ));
-
-        $myservice = $this->get('querymanager');
-        $usernameId = $myservice->findUserByUsername('testuser');
-        dump($usernameId);
+        $order = $this->get('orderservice')->getOrder($id);
+        $orderDetails = $this->get('orderedproductservice')->getOrderedProducts($id);
 
         $sum = $order->getDelivery()->getPrice();
         foreach ($orderDetails as $orderDetail)
