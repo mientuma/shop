@@ -8,9 +8,11 @@ use Doctrine\ORM\EntityManager;
 class OrderedProductsManager
 {
     protected $em;
+    protected $product;
 
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManager $entityManager, OrderedProducts $orderedProducts)
     {
+        $this->product = $orderedProducts;
         $this->em = $entityManager;
     }
 
@@ -25,5 +27,30 @@ class OrderedProductsManager
 
         return $qb->getQuery()->getResult();
     }
+
+    public function countFinalPrice($orderedProducts)
+    {
+        foreach($orderedProducts as $orderedProduct)
+        {
+            $this->product = $orderedProduct;
+            $this->product->setFinalPrice();
+        }
+
+        return $orderedProducts;
+    }
+
+    public function countSum($deliveryPrice, $orderDetails)
+    {
+        $sum = $deliveryPrice;
+
+        foreach ($orderDetails as $orderRow)
+        {
+            $this->product = $orderRow;
+            $sum += $this->product->getFinalPrice();
+        }
+
+        return $sum;
+    }
+
 
 }

@@ -151,9 +151,7 @@ $catalogue = new MessageCatalogue('fr', array (
     'registration.email.subject' => 'Bienvenue %username% !',
     'registration.email.message' => 'Bonjour %username% !
 
-Pour valider votre compte utilisateur, merci de vous rendre sur %confirmationUrl%.
-
-Ce lien ne peut être utilisé qu\'une seule fois pour valider votre compte.
+Pour valider votre compte utilisateur, merci de vous rendre sur %confirmationUrl%
 
 Cordialement,
 L\'équipe
@@ -339,9 +337,7 @@ $catalogueEn = new MessageCatalogue('en', array (
     'registration.email.subject' => 'Welcome %username%!',
     'registration.email.message' => 'Hello %username%!
 
-To finish activating your account - please visit %confirmationUrl%.
-
-This link can only be used once to validate your account.
+To finish activating your account - please visit %confirmationUrl%
 
 Regards,
 the Team.

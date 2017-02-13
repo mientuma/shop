@@ -116,7 +116,7 @@ class OrderController extends BaseController
      */
     public function orderListAction()
     {
-        $orders = $this->get('orderservice')->getOrders();
+        $orders = $this->get('app.order.service')->getOrders();
         return $this->render('default/orderList.html.twig', array(
             'orders' => $orders
         ));
@@ -129,15 +129,11 @@ class OrderController extends BaseController
      */
     public function orderDetailsAction($id)
     {
-        $order = $this->get('orderservice')->getOrder($id);
-        $orderDetails = $this->get('orderedproductservice')->getOrderedProducts($id);
-
-        $sum = $order->getDelivery()->getPrice();
-        foreach ($orderDetails as $orderDetail)
-        {
-            $orderDetail->countOrderValue();
-            $sum += $orderDetail->getFinalPrice();
-        }
+        $order = $this->get('app.order.service')->getOrder($id);
+        $orderedProducts = $this->get('app.ordered.products.service')->getOrderedProducts($id);
+        $orderDetails = $this->get('app.ordered.products.service')->countFinalPrice($orderedProducts);
+        $deliveryPrice = $order->getDelivery()->getPrice();
+        $sum = $this->get('app.ordered.products.service')->countSum($deliveryPrice, $orderDetails);
 
         return $this->render('default/orderDetails.html.twig', array(
             'orderDetails' => $orderDetails,

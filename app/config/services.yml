@@ -1,10 +1,13 @@
 parameters:
 
 services:
-  orderservice:
+  app.order.service:
     class: AppBundle\Utils\OrderManager
     arguments: ["@doctrine.orm.entity_manager", "@security.token_storage"]
 
-  orderedproductservice:
+  app.ordered.products.service:
     class: AppBundle\Utils\OrderedProductsManager
-    arguments: ["@doctrine.orm.entity_manager", "@products"]
+    arguments: ["@doctrine.orm.entity_manager", "@ordered.products"]
+
+  ordered.products:
+    class: AppBundle\Entity\OrderedProducts
