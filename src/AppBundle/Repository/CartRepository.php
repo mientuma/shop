@@ -10,4 +10,10 @@ namespace AppBundle\Repository;
  */
 class CartRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findByUser($user)
+    {
+        return $this->findBy(array(
+            'user' => $user
+        ));
+    }
 }

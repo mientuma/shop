@@ -209,21 +209,5 @@ class Cart
     {
         $this->finalPrice = $finalPrice;
     }
-
-    /**
-     *
-     *
-     *
-     *
-     *
-     * CUSTOM METHODS
-     *
-     *
-     *
-     *
-     *
-     */
-
-
     
 }

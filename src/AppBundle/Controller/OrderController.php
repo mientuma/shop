@@ -26,6 +26,8 @@ class OrderController extends BaseController
 {
 
     /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      * @Route("/order", name="order")
      */
     public function orderAction(Request $request)
@@ -52,51 +54,9 @@ class OrderController extends BaseController
             $em->persist($order);
             $em->flush();
 
-            $carts = $this->getDoctrine()->getRepository('AppBundle:Cart')->findBy(array(
-                'user' => $user
-            ));
+            $carts = $this->getDoctrine()->getRepository('AppBundle:Cart')->findByUser($user);
 
-            foreach ($carts as $cart)
-            {
-                $orderProduct = new OrderedProducts();
-                $product = $cart->getProduct();
-                $quantity = $cart->getQuantity();
-                $productPrice = $cart->getProduct()->getPrice();
-
-                $orderProduct
-                    ->setOrder($order)
-                    ->setProduct($product)
-                    ->setProductPrice($productPrice)
-                    ->setProductQuantity($quantity);
-
-                $productQuantity = $product->getQuantity();
-
-                if($productQuantity >= $quantity)
-                {
-                    $orderProduct
-                        ->setProductStatus('Dostępny, zarezerwowany')
-                        ->setProductReserved($quantity);
-                    $finalQuantity = $productQuantity - $quantity;
-                    $product->setQuantity($finalQuantity);
-                }
-                elseif($productQuantity !== 0)
-                {
-                    $orderProduct
-                        ->setProductStatus('Częściowa rezerwacja, oczekuje na dostawę')
-                        ->setProductReserved($productQuantity);
-                    $product->setQuantity(0);
-                }
-                else
-                {
-                    $orderProduct
-                        ->setProductStatus('Brak towaru, oczekuje na dostawę')
-                        ->setProductReserved(0);
-                }
-
-                $em->persist($orderProduct);
-                $em->remove($cart);
-                $em->flush();
-            }
+            $cartManager = $this->get('app.order.from.cart.service')->orderCart($carts, $order);
 
             $order->setStatus('Oczekuje na wpłatę');
             $em->flush();
@@ -123,14 +83,14 @@ class OrderController extends BaseController
     }
 
     /**
-     * @Route("/order/details/{id}", name="orderDetails")
-     * @param $id
+     * @Route("/order/details/{orderId}", name="orderDetails")
+     * @param $orderId
      * @return Response
      */
-    public function orderDetailsAction($id)
+    public function orderDetailsAction($orderId)
     {
-        $order = $this->get('app.order.service')->getOrder($id);
-        $orderedProducts = $this->get('app.ordered.products.service')->getOrderedProducts($id);
+        $order = $this->get('app.order.service')->getOrder($orderId);
+        $orderedProducts = $this->getDoctrine()->getRepository('AppBundle:OrderedProducts')->findById($orderId);
         $orderDetails = $this->get('app.ordered.products.service')->countFinalPrice($orderedProducts);
         $deliveryPrice = $order->getDelivery()->getPrice();
         $sum = $this->get('app.ordered.products.service')->countSum($deliveryPrice, $orderDetails);

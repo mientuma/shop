@@ -377,22 +377,22 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
         }
 
         // de__RG__orderDetails
-        if (0 === strpos($pathinfo, '/de/order/details') && preg_match('#^/de/order/details/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+        if (0 === strpos($pathinfo, '/de/order/details') && preg_match('#^/de/order/details/(?P<orderId>[^/]++)$#s', $pathinfo, $matches)) {
             return $this->mergeDefaults(array_replace($matches, array('_route' => 'de__RG__orderDetails')), array (  '_controller' => 'AppBundle\\Controller\\OrderController::orderDetailsAction',  '_locale' => 'de',));
         }
 
         // en__RG__orderDetails
-        if (0 === strpos($pathinfo, '/order/details') && preg_match('#^/order/details/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+        if (0 === strpos($pathinfo, '/order/details') && preg_match('#^/order/details/(?P<orderId>[^/]++)$#s', $pathinfo, $matches)) {
             return $this->mergeDefaults(array_replace($matches, array('_route' => 'en__RG__orderDetails')), array (  '_controller' => 'AppBundle\\Controller\\OrderController::orderDetailsAction',  '_locale' => 'en',));
         }
 
         // fr__RG__orderDetails
-        if (0 === strpos($pathinfo, '/fr/order/details') && preg_match('#^/fr/order/details/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+        if (0 === strpos($pathinfo, '/fr/order/details') && preg_match('#^/fr/order/details/(?P<orderId>[^/]++)$#s', $pathinfo, $matches)) {
             return $this->mergeDefaults(array_replace($matches, array('_route' => 'fr__RG__orderDetails')), array (  '_controller' => 'AppBundle\\Controller\\OrderController::orderDetailsAction',  '_locale' => 'fr',));
         }
 
         // pl__RG__orderDetails
-        if (0 === strpos($pathinfo, '/pl/order/details') && preg_match('#^/pl/order/details/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+        if (0 === strpos($pathinfo, '/pl/order/details') && preg_match('#^/pl/order/details/(?P<orderId>[^/]++)$#s', $pathinfo, $matches)) {
             return $this->mergeDefaults(array_replace($matches, array('_route' => 'pl__RG__orderDetails')), array (  '_controller' => 'AppBundle\\Controller\\OrderController::orderDetailsAction',  '_locale' => 'pl',));
         }
 

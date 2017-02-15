@@ -32,6 +32,7 @@ class appDevDebugProjectContainer extends Container
         $this->services = array();
         $this->methodMap = array(
             'annotation_reader' => 'getAnnotationReaderService',
+            'app.order.from.cart.service' => 'getApp_Order_From_Cart_ServiceService',
             'app.order.service' => 'getApp_Order_ServiceService',
             'app.ordered.products.service' => 'getApp_Ordered_Products_ServiceService',
             'assets.context' => 'getAssets_ContextService',
@@ -40,6 +41,7 @@ class appDevDebugProjectContainer extends Container
             'cache.system' => 'getCache_SystemService',
             'cache_clearer' => 'getCacheClearerService',
             'cache_warmer' => 'getCacheWarmerService',
+            'cart' => 'getCartService',
             'config_cache_factory' => 'getConfigCacheFactoryService',
             'controller_name_converter' => 'getControllerNameConverterService',
             'data_collector.dump' => 'getDataCollector_DumpService',
@@ -174,6 +176,7 @@ class appDevDebugProjectContainer extends Container
             'monolog.logger.translation' => 'getMonolog_Logger_TranslationService',
             'monolog.processor.psr_log_message' => 'getMonolog_Processor_PsrLogMessageService',
             'ordered.products' => 'getOrdered_ProductsService',
+            'products' => 'getProductsService',
             'profiler' => 'getProfilerService',
             'profiler_listener' => 'getProfilerListenerService',
             'property_accessor' => 'getPropertyAccessorService',
@@ -273,6 +276,7 @@ class appDevDebugProjectContainer extends Container
             'twig.profile' => 'getTwig_ProfileService',
             'twig.translation.extractor' => 'getTwig_Translation_ExtractorService',
             'uri_signer' => 'getUriSignerService',
+            'user' => 'getUserService',
             'validate_request_listener' => 'getValidateRequestListenerService',
             'validator' => 'getValidatorService',
             'validator.builder' => 'getValidator_BuilderService',
@@ -334,6 +338,19 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
+     * Gets the 'app.order.from.cart.service' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \AppBundle\Utils\CartManager A AppBundle\Utils\CartManager instance
+     */
+    protected function getApp_Order_From_Cart_ServiceService()
+    {
+        return $this->services['app.order.from.cart.service'] = new \AppBundle\Utils\CartManager($this->get('cart'), $this->get('doctrine.orm.default_entity_manager'));
+    }
+
+    /**
      * Gets the 'app.order.service' service.
      *
      * This service is shared.
@@ -356,7 +373,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getApp_Ordered_Products_ServiceService()
     {
-        return $this->services['app.ordered.products.service'] = new \AppBundle\Utils\OrderedProductsManager($this->get('doctrine.orm.default_entity_manager'), $this->get('ordered.products'));
+        return $this->services['app.ordered.products.service'] = new \AppBundle\Utils\OrderedProductsManager($this->get('ordered.products'));
     }
 
     /**
@@ -414,7 +431,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getCache_SystemService()
     {
-        return $this->services['cache.system'] = \Symfony\Component\Cache\Adapter\AbstractAdapter::createSystemCache('gK4scjYj7k', 0, 'yP662Z9wcUpN3cupznlueR', (__DIR__.'/pools'), $this->get('monolog.logger.cache', ContainerInterface::NULL_ON_INVALID_REFERENCE));
+        return $this->services['cache.system'] = \Symfony\Component\Cache\Adapter\AbstractAdapter::createSystemCache('gK4scjYj7k', 0, 'lEj8RbiF3xWOA2jfmJU4Uc', (__DIR__.'/pools'), $this->get('monolog.logger.cache', ContainerInterface::NULL_ON_INVALID_REFERENCE));
     }
 
     /**
@@ -432,8 +449,8 @@ class appDevDebugProjectContainer extends Container
         $b = new \Symfony\Component\HttpKernel\CacheClearer\Psr6CacheClearer();
         $b->addPool($this->get('cache.app'));
         $b->addPool($this->get('cache.system'));
-        $b->addPool(\Symfony\Component\Cache\Adapter\AbstractAdapter::createSystemCache('eQFRIB6h7+', 0, 'yP662Z9wcUpN3cupznlueR', (__DIR__.'/pools'), $a));
-        $b->addPool(\Symfony\Component\Cache\Adapter\AbstractAdapter::createSystemCache('3ZXoQ04+Ao', 0, 'yP662Z9wcUpN3cupznlueR', (__DIR__.'/pools'), $a));
+        $b->addPool(\Symfony\Component\Cache\Adapter\AbstractAdapter::createSystemCache('eQFRIB6h7+', 0, 'lEj8RbiF3xWOA2jfmJU4Uc', (__DIR__.'/pools'), $a));
+        $b->addPool(\Symfony\Component\Cache\Adapter\AbstractAdapter::createSystemCache('3ZXoQ04+Ao', 0, 'lEj8RbiF3xWOA2jfmJU4Uc', (__DIR__.'/pools'), $a));
 
         return $this->services['cache_clearer'] = new \Symfony\Component\HttpKernel\CacheClearer\ChainCacheClearer(array(0 => $b));
     }
@@ -454,6 +471,19 @@ class appDevDebugProjectContainer extends Container
         $c = new \Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplateFinder($a, $b, ($this->targetDirs[3].'\\app/Resources'));
 
         return $this->services['cache_warmer'] = new \Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerAggregate(array(0 => new \Symfony\Bundle\FrameworkBundle\CacheWarmer\TemplatePathsCacheWarmer($c, $this->get('templating.locator')), 1 => $this->get('kernel.class_cache.cache_warmer'), 2 => new \Symfony\Bundle\FrameworkBundle\CacheWarmer\TranslationsCacheWarmer($this->get('translator.default')), 3 => new \Symfony\Bundle\FrameworkBundle\CacheWarmer\RouterCacheWarmer($this->get('router')), 4 => new \Symfony\Bundle\TwigBundle\CacheWarmer\TemplateCacheCacheWarmer($this, $c, array()), 5 => new \Symfony\Bundle\TwigBundle\CacheWarmer\TemplateCacheWarmer($this->get('twig'), new \Symfony\Bundle\TwigBundle\TemplateIterator($a, ($this->targetDirs[3].'\\app'), array())), 6 => new \Symfony\Bridge\Doctrine\CacheWarmer\ProxyCacheWarmer($this->get('doctrine'))));
+    }
+
+    /**
+     * Gets the 'cart' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \AppBundle\Entity\Cart A AppBundle\Entity\Cart instance
+     */
+    protected function getCartService()
+    {
+        return $this->services['cart'] = new \AppBundle\Entity\Cart($this->get('user'), $this->get('products'));
     }
 
     /**
@@ -2400,6 +2430,19 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
+     * Gets the 'products' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \AppBundle\Entity\Products A AppBundle\Entity\Products instance
+     */
+    protected function getProductsService()
+    {
+        return $this->services['products'] = new \AppBundle\Entity\Products();
+    }
+
+    /**
      * Gets the 'profiler' service.
      *
      * This service is shared.
@@ -2656,37 +2699,40 @@ class appDevDebugProjectContainer extends Container
         $j = $this->get('security.authentication.session_strategy');
         $k = $this->get('debug.security.access.decision_manager');
 
-        $l = new \Symfony\Component\HttpFoundation\RequestMatcher('^/login$');
+        $l = new \Symfony\Component\HttpFoundation\RequestMatcher('^/login');
 
         $m = new \Symfony\Component\HttpFoundation\RequestMatcher('^/register');
 
         $n = new \Symfony\Component\HttpFoundation\RequestMatcher('^/resetting');
 
-        $o = new \Symfony\Component\HttpFoundation\RequestMatcher('^/admin/');
+        $o = new \Symfony\Component\HttpFoundation\RequestMatcher('^/order');
 
-        $p = new \Symfony\Component\Security\Http\AccessMap();
-        $p->add($l, array(0 => 'IS_AUTHENTICATED_ANONYMOUSLY'), NULL);
-        $p->add($m, array(0 => 'IS_AUTHENTICATED_ANONYMOUSLY'), NULL);
-        $p->add($n, array(0 => 'IS_AUTHENTICATED_ANONYMOUSLY'), NULL);
-        $p->add($o, array(0 => 'ROLE_ADMIN'), NULL);
+        $p = new \Symfony\Component\HttpFoundation\RequestMatcher('^/admin/');
 
-        $q = new \Symfony\Component\Security\Http\HttpUtils($f, $f);
+        $q = new \Symfony\Component\Security\Http\AccessMap();
+        $q->add($l, array(0 => 'IS_AUTHENTICATED_ANONYMOUSLY'), NULL);
+        $q->add($m, array(0 => 'IS_AUTHENTICATED_ANONYMOUSLY'), NULL);
+        $q->add($n, array(0 => 'IS_AUTHENTICATED_ANONYMOUSLY'), NULL);
+        $q->add($o, array(0 => 'ROLE_USER'), NULL);
+        $q->add($p, array(0 => 'ROLE_ADMIN'), NULL);
 
-        $r = new \Symfony\Component\Security\Http\Firewall\LogoutListener($b, $q, new \Symfony\Component\Security\Http\Logout\DefaultLogoutSuccessHandler($q, 'homepage'), array('csrf_parameter' => '_csrf_token', 'csrf_token_id' => 'logout', 'logout_path' => 'fos_user_security_logout'));
-        $r->addHandler(new \Symfony\Component\Security\Http\Logout\SessionLogoutHandler());
-        $r->addHandler($g);
+        $r = new \Symfony\Component\Security\Http\HttpUtils($f, $f);
 
-        $s = new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationSuccessHandler($q, array());
-        $s->setOptions(array('login_path' => 'fos_user_security_login', 'default_target_path' => 'homepage', 'always_use_default_target_path' => false, 'target_path_parameter' => '_target_path', 'use_referer' => false));
-        $s->setProviderKey('main');
+        $s = new \Symfony\Component\Security\Http\Firewall\LogoutListener($b, $r, new \Symfony\Component\Security\Http\Logout\DefaultLogoutSuccessHandler($r, 'homepage'), array('csrf_parameter' => '_csrf_token', 'csrf_token_id' => 'logout', 'logout_path' => 'fos_user_security_logout'));
+        $s->addHandler(new \Symfony\Component\Security\Http\Logout\SessionLogoutHandler());
+        $s->addHandler($g);
 
-        $t = new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationFailureHandler($h, $q, array(), $a);
-        $t->setOptions(array('login_path' => 'fos_user_security_login', 'failure_path' => NULL, 'failure_forward' => false, 'failure_path_parameter' => '_failure_path'));
+        $t = new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationSuccessHandler($r, array());
+        $t->setOptions(array('login_path' => 'fos_user_security_login', 'default_target_path' => 'homepage', 'always_use_default_target_path' => false, 'target_path_parameter' => '_target_path', 'use_referer' => false));
+        $t->setProviderKey('main');
 
-        $u = new \Symfony\Component\Security\Http\Firewall\UsernamePasswordFormAuthenticationListener($b, $i, $j, $q, 'main', $s, $t, array('require_previous_session' => false, 'check_path' => 'fos_user_security_check', 'use_forward' => false, 'username_parameter' => '_username', 'password_parameter' => '_password', 'csrf_parameter' => '_csrf_token', 'csrf_token_id' => 'authenticate', 'post_only' => true), $a, $d, $this->get('security.csrf.token_manager'));
-        $u->setRememberMeServices($g);
+        $u = new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationFailureHandler($h, $r, array(), $a);
+        $u->setOptions(array('login_path' => 'fos_user_security_login', 'failure_path' => NULL, 'failure_forward' => false, 'failure_path_parameter' => '_failure_path'));
 
-        return $this->services['security.firewall.map.context.main'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => new \Symfony\Component\Security\Http\Firewall\ChannelListener($p, new \Symfony\Component\Security\Http\EntryPoint\RetryAuthenticationEntryPoint(80, 443), $a), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($b, array(0 => $c, 1 => new \Symfony\Bridge\Doctrine\Security\User\EntityUserProvider($this->get('doctrine'), 'AppBundle:User', 'username', NULL)), 'main', $a, $d, $e), 2 => $r, 3 => $u, 4 => new \Symfony\Component\Security\Http\Firewall\RememberMeListener($b, $g, $i, $a, $d, true, $j), 5 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($b, '58a21cb8945076.21656902', $a, $i), 6 => new \Symfony\Component\Security\Http\Firewall\SwitchUserListener($b, $c, $this->get('security.user_checker.main'), 'main', $k, $a, '_switch_user', 'ROLE_ALLOWED_TO_SWITCH', $d), 7 => new \Symfony\Component\Security\Http\Firewall\AccessListener($b, $k, $p, $i)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $e, $q, 'main', new \Symfony\Component\Security\Http\EntryPoint\FormAuthenticationEntryPoint($h, $q, 'fos_user_security_login', false), NULL, NULL, $a, false));
+        $v = new \Symfony\Component\Security\Http\Firewall\UsernamePasswordFormAuthenticationListener($b, $i, $j, $r, 'main', $t, $u, array('require_previous_session' => false, 'check_path' => 'fos_user_security_check', 'use_forward' => false, 'username_parameter' => '_username', 'password_parameter' => '_password', 'csrf_parameter' => '_csrf_token', 'csrf_token_id' => 'authenticate', 'post_only' => true), $a, $d, $this->get('security.csrf.token_manager'));
+        $v->setRememberMeServices($g);
+
+        return $this->services['security.firewall.map.context.main'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => new \Symfony\Component\Security\Http\Firewall\ChannelListener($q, new \Symfony\Component\Security\Http\EntryPoint\RetryAuthenticationEntryPoint(80, 443), $a), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($b, array(0 => $c, 1 => new \Symfony\Bridge\Doctrine\Security\User\EntityUserProvider($this->get('doctrine'), 'AppBundle:User', 'username', NULL)), 'main', $a, $d, $e), 2 => $s, 3 => $v, 4 => new \Symfony\Component\Security\Http\Firewall\RememberMeListener($b, $g, $i, $a, $d, true, $j), 5 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($b, '58a449d3742212.47083808', $a, $i), 6 => new \Symfony\Component\Security\Http\Firewall\SwitchUserListener($b, $c, $this->get('security.user_checker.main'), 'main', $k, $a, '_switch_user', 'ROLE_ALLOWED_TO_SWITCH', $d), 7 => new \Symfony\Component\Security\Http\Firewall\AccessListener($b, $k, $q, $i)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $e, $r, 'main', new \Symfony\Component\Security\Http\EntryPoint\FormAuthenticationEntryPoint($h, $r, 'fos_user_security_login', false), NULL, NULL, $a, false));
     }
 
     /**
@@ -3767,6 +3813,19 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
+     * Gets the 'user' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return \AppBundle\Entity\User A AppBundle\Entity\User instance
+     */
+    protected function getUserService()
+    {
+        return $this->services['user'] = new \AppBundle\Entity\User();
+    }
+
+    /**
      * Gets the 'validate_request_listener' service.
      *
      * This service is shared.
@@ -4103,7 +4162,7 @@ class appDevDebugProjectContainer extends Container
     {
         $a = $this->get('security.user_checker.main');
 
-        $this->services['security.authentication.manager'] = $instance = new \Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager(array(0 => new \Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider($this->get('fos_user.user_provider.username_email'), $a, 'main', $this->get('security.encoder_factory'), true), 1 => new \Symfony\Component\Security\Core\Authentication\Provider\RememberMeAuthenticationProvider($a, 'ThisTokenIsNotSoSecretChangeIt', 'main'), 2 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('58a21cb8945076.21656902')), true);
+        $this->services['security.authentication.manager'] = $instance = new \Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager(array(0 => new \Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider($this->get('fos_user.user_provider.username_email'), $a, 'main', $this->get('security.encoder_factory'), true), 1 => new \Symfony\Component\Security\Core\Authentication\Provider\RememberMeAuthenticationProvider($a, 'ThisTokenIsNotSoSecretChangeIt', 'main'), 2 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('58a449d3742212.47083808')), true);
 
         $instance->setEventDispatcher($this->get('debug.event_dispatcher'));
 
@@ -4748,6 +4807,7 @@ class appDevDebugProjectContainer extends Container
             'fos_user.resetting.email.from_email' => array(
                 'mientuma@wp.pl' => 'Matiq',
             ),
+            'fos_user.resetting.retry_ttl' => 7200,
             'fos_user.resetting.token_ttl' => 86400,
             'fos_user.resetting.form.type' => 'FOS\\UserBundle\\Form\\Type\\ResettingFormType',
             'fos_user.resetting.form.name' => 'fos_user_resetting_form',
