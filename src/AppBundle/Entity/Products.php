@@ -413,10 +413,14 @@ class Products
         $this->addedQuantity = $addedQuantity;
     }
 
-    public function updateQuantity($quantity, $addedQuantity)
+
+    // Own Methods
+
+
+    public function updateQuantity($addedQuantity)
     {
-        $quantity = $quantity + $addedQuantity;
-        $this->setQuantity($quantity);
+        $newQuantity = $this->getQuantity() + $addedQuantity;
+        $this->setQuantity($newQuantity);
     }
 
 }

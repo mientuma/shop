@@ -437,7 +437,6 @@
     <parameter key="fos_user.resetting.email.from_email" type="collection">
       <parameter key="mientuma@wp.pl">Matiq</parameter>
     </parameter>
-    <parameter key="fos_user.resetting.retry_ttl">7200</parameter>
     <parameter key="fos_user.resetting.token_ttl">86400</parameter>
     <parameter key="fos_user.resetting.form.type">FOS\UserBundle\Form\Type\ResettingFormType</parameter>
     <parameter key="fos_user.resetting.form.name">fos_user_resetting_form</parameter>
@@ -549,6 +548,10 @@
       <argument type="service" id="cart"/>
       <argument type="service" id="doctrine.orm.default_entity_manager"/>
     </service>
+    <service id="app.supply.manager.service" class="AppBundle\Utils\SupplyManager">
+      <argument type="service" id="supply.products"/>
+      <argument type="service" id="doctrine.orm.default_entity_manager"/>
+    </service>
     <service id="ordered.products" class="AppBundle\Entity\OrderedProducts"/>
     <service id="cart" class="AppBundle\Entity\Cart">
       <argument type="service" id="user"/>
@@ -556,6 +559,7 @@
     </service>
     <service id="user" class="AppBundle\Entity\User"/>
     <service id="products" class="AppBundle\Entity\Products"/>
+    <service id="supply.products" class="AppBundle\Entity\SupplyProducts"/>
     <service id="controller_name_converter" class="Symfony\Bundle\FrameworkBundle\Controller\ControllerNameParser" public="false">
       <tag name="monolog.logger" channel="request"/>
       <argument type="service" id="kernel"/>
@@ -671,7 +675,7 @@
                   <tag name="cache.pool"/>
                   <argument>eQFRIB6h7+</argument>
                   <argument>0</argument>
-                  <argument>lEj8RbiF3xWOA2jfmJU4Uc</argument>
+                  <argument>C21N43-tTrh4jPUoYAuzX0</argument>
                   <argument>C:\xampp\htdocs\SYMFONY\shop\var\cache\dev/pools</argument>
                   <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
                   <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
@@ -684,7 +688,7 @@
                   <tag name="cache.pool"/>
                   <argument>3ZXoQ04+Ao</argument>
                   <argument>0</argument>
-                  <argument>lEj8RbiF3xWOA2jfmJU4Uc</argument>
+                  <argument>C21N43-tTrh4jPUoYAuzX0</argument>
                   <argument>C:\xampp\htdocs\SYMFONY\shop\var\cache\dev/pools</argument>
                   <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
                   <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
@@ -1335,7 +1339,7 @@
       <tag name="cache.pool"/>
       <argument>gK4scjYj7k</argument>
       <argument>0</argument>
-      <argument>lEj8RbiF3xWOA2jfmJU4Uc</argument>
+      <argument>C21N43-tTrh4jPUoYAuzX0</argument>
       <argument>C:\xampp\htdocs\SYMFONY\shop\var\cache\dev/pools</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
@@ -2182,7 +2186,7 @@
         </argument>
         <argument type="service">
           <service class="Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider" public="false">
-            <argument>58a449d3742212.47083808</argument>
+            <argument>58a4ab87baea63.45757101</argument>
           </service>
         </argument>
       </argument>
@@ -2530,7 +2534,7 @@
         <argument type="service">
           <service class="Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener" public="false">
             <argument type="service" id="security.token_storage"/>
-            <argument>58a449d3742212.47083808</argument>
+            <argument>58a4ab87baea63.45757101</argument>
             <argument type="service" id="monolog.logger.security" on-invalid="null"/>
             <argument type="service" id="security.authentication.manager"/>
           </service>

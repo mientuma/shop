@@ -13,6 +13,10 @@ services:
     class: AppBundle\Utils\CartManager
     arguments: ["@cart", "@doctrine.orm.entity_manager"]
 
+  app.supply.manager.service:
+    class: AppBundle\Utils\SupplyManager
+    arguments: ["@supply.products", "@doctrine.orm.entity_manager"]
+
 
 ## ENTITIES:
   ordered.products:
@@ -27,3 +31,6 @@ services:
 
   products:
     class: AppBundle\Entity\Products
+
+  supply.products:
+    class: AppBundle\Entity\SupplyProducts

@@ -9,6 +9,7 @@ class OrderManager
 {
     protected $em;
     protected $user;
+    protected $order;
 
     public function __construct(EntityManager $entityManager, TokenStorage $tokenStorage)
     {

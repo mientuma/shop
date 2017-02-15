@@ -141,22 +141,22 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
         }
 
         // de__RG__adminOrdersDetails
-        if (0 === strpos($pathinfo, '/de/admin/orders/details') && preg_match('#^/de/admin/orders/details/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+        if (0 === strpos($pathinfo, '/de/admin/orders/details') && preg_match('#^/de/admin/orders/details/(?P<orderId>[^/]++)$#s', $pathinfo, $matches)) {
             return $this->mergeDefaults(array_replace($matches, array('_route' => 'de__RG__adminOrdersDetails')), array (  '_controller' => 'AppBundle\\Controller\\AdminController::ordersDetailsAdminAction',  '_locale' => 'de',));
         }
 
         // en__RG__adminOrdersDetails
-        if (0 === strpos($pathinfo, '/admin/orders/details') && preg_match('#^/admin/orders/details/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+        if (0 === strpos($pathinfo, '/admin/orders/details') && preg_match('#^/admin/orders/details/(?P<orderId>[^/]++)$#s', $pathinfo, $matches)) {
             return $this->mergeDefaults(array_replace($matches, array('_route' => 'en__RG__adminOrdersDetails')), array (  '_controller' => 'AppBundle\\Controller\\AdminController::ordersDetailsAdminAction',  '_locale' => 'en',));
         }
 
         // fr__RG__adminOrdersDetails
-        if (0 === strpos($pathinfo, '/fr/admin/orders/details') && preg_match('#^/fr/admin/orders/details/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+        if (0 === strpos($pathinfo, '/fr/admin/orders/details') && preg_match('#^/fr/admin/orders/details/(?P<orderId>[^/]++)$#s', $pathinfo, $matches)) {
             return $this->mergeDefaults(array_replace($matches, array('_route' => 'fr__RG__adminOrdersDetails')), array (  '_controller' => 'AppBundle\\Controller\\AdminController::ordersDetailsAdminAction',  '_locale' => 'fr',));
         }
 
         // pl__RG__adminOrdersDetails
-        if (0 === strpos($pathinfo, '/pl/admin/orders/details') && preg_match('#^/pl/admin/orders/details/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+        if (0 === strpos($pathinfo, '/pl/admin/orders/details') && preg_match('#^/pl/admin/orders/details/(?P<orderId>[^/]++)$#s', $pathinfo, $matches)) {
             return $this->mergeDefaults(array_replace($matches, array('_route' => 'pl__RG__adminOrdersDetails')), array (  '_controller' => 'AppBundle\\Controller\\AdminController::ordersDetailsAdminAction',  '_locale' => 'pl',));
         }
 

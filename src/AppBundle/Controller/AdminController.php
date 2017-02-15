@@ -32,51 +32,44 @@ class AdminController extends BaseController
     }
 
     /**
+     * @return Response
      * @Route("/admin/orders", name="adminOrders")
      */
     public function ordersAdminAction()
     {
-        $orders = $this->getDoctrine()->getRepository('AppBundle:Orders')->findAll();
-
+        $orders = $this->get('app.order.service')->getOrders();
         return $this->render('default/orderListAdmin.html.twig', array(
             'orders' => $orders
         ));
     }
 
     /**
-     * @Route("/admin/orders/details/{id}", name="adminOrdersDetails")
+     * @param $orderId
+     * @return Response
+     * @Route("/admin/orders/details/{orderId}", name="adminOrdersDetails")
      */
-    public function ordersDetailsAdminAction($id)
+    public function ordersDetailsAdminAction($orderId)
     {
-        $order = $this->getDoctrine()->getRepository('AppBundle:Orders')->findOneBy(array(
-            'id' => $id
-        ));
-        $orderDetails = $this->getDoctrine()->getRepository('AppBundle:OrderedProducts')->findBy(array(
-            'orderId' => $id
-        ));
-        $newOrder = new OrderedProducts();
-        $sum = $order->getDelivery()->getPrice();
+        $order = $this->get('app.order.service')->getOrder($orderId);
+        $orderedProducts = $this->getDoctrine()->getRepository('AppBundle:OrderedProducts')->findById($orderId);
+        $orderDetails = $this->get('app.ordered.products.service')->countFinalPrice($orderedProducts);
+        $deliveryPrice = $order->getDelivery()->getPrice();
+        $sum = $this->get('app.ordered.products.service')->countSum($deliveryPrice, $orderDetails);
 
-        foreach ($orderDetails as $orderDetail)
-        {
-            $orderDetail->countOrderValue();
-            $sum += $orderDetail->getFinalPrice();
-        }
-
-        return $this->render('default/orderDetailsAdmin.html.twig', array(
-            'order' => $order,
+        return $this->render('default/orderListAdmin.html.twig', array(
             'orderDetails' => $orderDetails,
-            'sum' => $sum
+            'sum' => $sum,
+            'order' => $order
         ));
     }
 
     /**
+     * @return Response
      * @Route("/admin/users", name="adminUsers")
      */
     public function usersAdminAction()
     {
         $users = $this->getDoctrine()->getRepository('AppBundle:User')->findAll();
-
         return $this->render('default/users.html.twig', array(
             'users' => $users
         ));
@@ -100,26 +93,9 @@ class AdminController extends BaseController
             $em->persist($supply);
             $em->flush();
 
-            $repository = $this->getDoctrine()->getRepository('AppBundle:Products');
+            $supplies = $form->get('supplyProducts')->getData()->toArray();
 
-            $arr = $form->get('supplyProducts')->getData()->toArray();
-
-            $productsId = array();
-
-            foreach($arr as $inc)
-            {
-                $id = $inc->getProduct()->getId();
-                $product = $repository->findOneBy(array(
-                    'id' => $id
-                ));
-                $addedQuantity = $inc->getProductQuantity();
-                $originalQuantity = $product->getQuantity();
-                $product->updateQuantity($originalQuantity, $addedQuantity);
-                $em->persist($product);
-                $em->flush();
-
-                $productsId[] .= $id;
-            }
+            $productsId = $this->get('app.supply.manager.service')->addProducts($supplies);
 
             $orders = $this->getDoctrine()->getRepository('AppBundle:Orders')->findBy(
                 array('status' => 'Oczekuje na wpłatę'),
