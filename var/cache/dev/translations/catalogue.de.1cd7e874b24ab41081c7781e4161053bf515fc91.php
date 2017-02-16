@@ -337,7 +337,9 @@ $catalogueEn = new MessageCatalogue('en', array (
     'registration.email.subject' => 'Welcome %username%!',
     'registration.email.message' => 'Hello %username%!
 
-To finish activating your account - please visit %confirmationUrl%
+To finish activating your account - please visit %confirmationUrl%.
+
+This link can only be used once to validate your account.
 
 Regards,
 the Team.

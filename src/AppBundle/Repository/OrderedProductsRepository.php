@@ -16,4 +16,15 @@ class OrderedProductsRepository extends \Doctrine\ORM\EntityRepository
             'orderId' => $orderId
         ));
     }
+
+    public function findByReservation($ordersIds, $productIds)
+    {
+        return $this->findBy(
+            array(
+                'orderId' => ($ordersIds),
+                'productId' => ($productIds),
+                'productStatus' => array('Towar częściowo zarezerwowany', 'Brak towaru, oczekuje na dostawę')
+            )
+        );
+    }
 }

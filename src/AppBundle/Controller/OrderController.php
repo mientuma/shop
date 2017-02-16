@@ -44,7 +44,7 @@ class OrderController extends BaseController
 
             $carts = $this->getDoctrine()->getRepository('AppBundle:Cart')->findByUser($user);
 
-            $cartManager = $this->get('app.order.from.cart.service')->orderCart($carts, $order);
+            $this->get('app.order.from.cart.service')->orderCart($carts, $order);
 
             $order->setStatus('Oczekuje na wpłatę');
             $em->flush();
@@ -86,7 +86,7 @@ class OrderController extends BaseController
         return $this->render('default/orderDetails.html.twig', array(
             'orderDetails' => $orderDetails,
             'sum' => $sum,
-            'orders' => $order
+            'order' => $order
         ));
     }
 }

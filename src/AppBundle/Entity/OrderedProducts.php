@@ -296,4 +296,7 @@ class OrderedProducts
     {
         return $this->productReserved;
     }
+
+    // Own Methods
+
 }

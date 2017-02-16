@@ -45,4 +45,26 @@ class OrderManager
 
         return $qb->getQuery()->getResult();
     }
+
+    public function findByPendingStatus()
+    {
+        $qb = $this->em->createQueryBuilder();
+
+        $qb->select('o.id')
+            ->from('AppBundle:Orders', 'o')
+            ->where('o.status = :status')
+            ->setParameter('status', 'Oczekuje na wpłatę')
+            ->orderBy('o.orderTime', 'ASC')
+            ->getQuery();
+
+        $qb->getQuery()->getResult();
+
+        $ids = array();
+        foreach ($qb as $key)
+        {
+            $ids[] .= $key->getId();
+        }
+
+        return $ids;
+    }
 }

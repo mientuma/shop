@@ -29,12 +29,13 @@ class SupplyManager
             $product = $this->supply->getProduct();
             $product->updateQuantity($addedQuantity);
 
-            $idsArray[] .= $product->getId();
+            $idsArray[] += $product->getId();
 
             $this->em->persist($product);
             $this->em->flush();
         }
 
         return $idsArray;
+
     }
 }

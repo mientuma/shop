@@ -59,7 +59,7 @@ class AdminController extends BaseController
         return $this->render('default/orderListAdmin.html.twig', array(
             'orderDetails' => $orderDetails,
             'sum' => $sum,
-            'order' => $order
+            'orders' => $order
         ));
     }
 
@@ -95,64 +95,13 @@ class AdminController extends BaseController
 
             $supplies = $form->get('supplyProducts')->getData()->toArray();
 
-            $productsId = $this->get('app.supply.manager.service')->addProducts($supplies);
+            $productIds = $this->get('app.supply.manager.service')->addProducts($supplies);
 
-            $orders = $this->getDoctrine()->getRepository('AppBundle:Orders')->findBy(
-                array('status' => 'Oczekuje na wpłatę'),
-                array('orderTime' => 'ASC')
-            );
+            $ordersIds = $this->get('app.order.service')->findByPendingStatus();
 
-            $ordersId = array();
-            foreach ($orders as $order)
-            {
-                $id = $order->getId();
-                $ordersId[] .= $id;
-            }
+            $orderedProducts = $this->getDoctrine()->getRepository('AppBundle:OrderedProducts')->findByReservation($ordersIds, $productIds);
 
-            $orderedProducts = $this->getDoctrine()->getRepository('AppBundle:OrderedProducts')->findBy(
-                array(
-                    'orderId' => ($ordersId),
-                    'productId' => ($productsId),
-                    'productStatus' => array('Towar częściowo zarezerwowany', 'Brak towaru, oczekuje na dostawę')
-                )
-            );
-
-            foreach ($orderedProducts as $orderedProduct)
-            {
-                $product = $orderedProduct->getProduct();
-                $quantity = $orderedProduct->getProductQuantity();
-                $reservation = $orderedProduct->getProductReserved();
-                $difference = $quantity - $reservation;
-                $databaseQuantity = $this->getDoctrine()->getRepository('AppBundle:Products')->find($product)->getQuantity();
-
-                if($databaseQuantity >= $difference)
-                {
-                    $newProductValue = $databaseQuantity-$difference;
-                    $product->setQuantity($newProductValue);
-
-                    $orderedProduct->setProductReserved($quantity);
-                    $orderedProduct->setProductStatus('Towar zarezerwowany');
-                    $em = $this->getDoctrine()->getManager();
-                    $em->persist($product);
-                    $em->persist($orderedProduct);
-                    $em->flush();
-                }
-                elseif($databaseQuantity == 0)
-                {
-                    break 1;
-                }
-                else
-                {
-                    $newReservation = $reservation + $databaseQuantity;
-                    $orderedProduct->setProductReserved($newReservation);
-                    $orderedProduct->setProductStatus('Towar częściowo zarezerwowany');
-                    $product->setQuantity(0);
-                    $em = $this->getDoctrine()->getManager();
-                    $em->persist($orderedProduct);
-                    $em->persist($product);
-                    $em->flush();
-                }
-            }
+            $this->get('app.ordered.products.service')->manageOrderedProductsReservation($orderedProducts);
 
             $this->addFlash(
                 'supplyNote',

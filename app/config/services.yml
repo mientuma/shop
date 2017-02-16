@@ -7,7 +7,7 @@ services:
 
   app.ordered.products.service:
     class: AppBundle\Utils\OrderedProductsManager
-    arguments: ["@ordered.products"]
+    arguments: ["@ordered.products", "@doctrine.orm.entity_manager"]
 
   app.order.from.cart.service:
     class: AppBundle\Utils\CartManager

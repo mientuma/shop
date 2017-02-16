@@ -10,4 +10,11 @@ namespace AppBundle\Repository;
  */
 class OrdersRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findByPendingStatus()
+    {
+        return $this->findBy(
+            array('status' => 'Oczekuje na wpłatę'),
+            array('orderTime' => 'ASC')
+        );
+    }
 }
