@@ -2,6 +2,8 @@
 
 namespace AppBundle\Utils;
 
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
@@ -50,21 +52,13 @@ class OrderManager
     {
         $qb = $this->em->createQueryBuilder();
 
-        $qb->select('o.id')
+        $qb->select('o')
             ->from('AppBundle:Orders', 'o')
             ->where('o.status = :status')
             ->setParameter('status', 'Oczekuje na wpłatę')
-            ->orderBy('o.orderTime', 'ASC')
-            ->getQuery();
+            ->orderBy('o.orderTime', 'ASC');
 
-        $qb->getQuery()->getResult();
+        return $qb->getQuery()->getResult();
 
-        $ids = array();
-        foreach ($qb as $key)
-        {
-            $ids[] .= $key->getId();
-        }
-
-        return $ids;
     }
 }

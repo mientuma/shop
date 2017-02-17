@@ -76,6 +76,8 @@ class AdminController extends BaseController
     }
 
     /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      * @Route("/admin/supply", name="adminSupply")
      */
     public function supplyAdminAction(Request $request)
@@ -96,17 +98,17 @@ class AdminController extends BaseController
             $supplies = $form->get('supplyProducts')->getData()->toArray();
 
             $productIds = $this->get('app.supply.manager.service')->addProducts($supplies);
-
-            $ordersIds = $this->get('app.order.service')->findByPendingStatus();
-
-            $orderedProducts = $this->getDoctrine()->getRepository('AppBundle:OrderedProducts')->findByReservation($ordersIds, $productIds);
-
-            $this->get('app.ordered.products.service')->manageOrderedProductsReservation($orderedProducts);
-
+            $orders = $this->get('app.order.service')->findByPendingStatus();
+            $orderedProducts = $this->getDoctrine()->getRepository('AppBundle:OrderedProducts')->findByReservation($orders, $productIds);
             $this->addFlash(
                 'supplyNote',
                 'Dostawa została pomyślnie przyjęta!'
             );
+
+            if($orderedProducts)
+            {
+                $this->get('app.ordered.products.service')->manageOrderedProductsReservation($orderedProducts);
+            }
             return $this->redirectToRoute('adminSupply');
         }
 

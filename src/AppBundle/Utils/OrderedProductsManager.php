@@ -45,30 +45,30 @@ class OrderedProductsManager
         foreach ($orderedProducts as $orderedProduct)
         {
             $this->product = $orderedProduct;
-            $product = $this->product->getProduct();
-            $quantity = $this->product->getProductQuantity();
-            $reservation = $this->product->getProductReserved();
-            $difference = $quantity - $reservation;
-            $databaseQuantity = $this->getProductQuantity($product);
+            $product = $this->product->getProduct(); // Konkretny produkt z bazy produktów.
+            $orderedQuantity = $this->product->getProductQuantity(); // Zamawiana ilość.
+            $reservation = $this->product->getProductReserved(); // Ilość zarezerwowana przy zamówieniu.
+            $difference = $orderedQuantity - $reservation; // Różnica między ilością już zarezerwowaną a zamówioną.
+            $originalProductQuantity = $product->getQuantity(); // Ilość konkretnego produktu w bazie na teraz.
 
-            if($databaseQuantity >= $difference)
+            if($originalProductQuantity >= $difference) // W db jest wystarczająco produktów, żeby obsłużyć to zamówienie.
             {
-                $newProductValue = $databaseQuantity-$difference;
+                $newProductValue = $originalProductQuantity - $difference;
                 $product->setQuantity($newProductValue);
 
-                $this->product->setProductReserved($quantity);
+                $this->product->setProductReserved($orderedQuantity);
                 $this->product->setProductStatus('Towar zarezerwowany');
                 $this->em->persist($product);
                 $this->em->persist($this->product);
                 $this->em->flush();
             }
-            elseif($databaseQuantity == 0)
+            elseif($originalProductQuantity == 0) // Brak produktu w bazie.
             {
                 break 1;
             }
-            else
+            else // W db jest niepełna ilość produktu do obsłużenia tego zamówienia.
             {
-                $newReservation = $reservation + $databaseQuantity;
+                $newReservation = $reservation + $originalProductQuantity;
                 $this->product->setProductReserved($newReservation);
                 $this->product->setProductStatus('Towar częściowo zarezerwowany');
                 $product->setQuantity(0);
@@ -78,18 +78,4 @@ class OrderedProductsManager
             }
         }
     }
-
-    public function getProductQuantity($product)
-    {
-        $qb = $this->em->createQueryBuilder();
-
-        $qb->select('p.quantity')
-            ->from('AppBundle:Products', 'p')
-            ->where('p = :product')
-            ->setParameter('p', $product);
-
-        return $qb->getQuery()->setMaxResults(1)->getOneOrNullResult();
-    }
-
-
 }
