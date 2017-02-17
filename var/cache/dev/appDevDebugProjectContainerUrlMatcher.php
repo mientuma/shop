@@ -200,24 +200,24 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
             return array (  '_controller' => 'AppBundle\\Controller\\AdminController::supplyAdminAction',  '_locale' => 'pl',  '_route' => 'pl__RG__adminSupply',);
         }
 
-        // de__RG__sample
-        if (0 === strpos($pathinfo, '/de/sample') && preg_match('#^/de/sample/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-            return $this->mergeDefaults(array_replace($matches, array('_route' => 'de__RG__sample')), array (  '_controller' => 'AppBundle\\Controller\\AdminController::sampleAction',  '_locale' => 'de',));
+        // de__RG__adminUserView
+        if (0 === strpos($pathinfo, '/de/admin/users') && preg_match('#^/de/admin/users/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'de__RG__adminUserView')), array (  '_controller' => 'AppBundle\\Controller\\AdminController::sampleAction',  '_locale' => 'de',));
         }
 
-        // en__RG__sample
-        if (0 === strpos($pathinfo, '/sample') && preg_match('#^/sample/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-            return $this->mergeDefaults(array_replace($matches, array('_route' => 'en__RG__sample')), array (  '_controller' => 'AppBundle\\Controller\\AdminController::sampleAction',  '_locale' => 'en',));
+        // en__RG__adminUserView
+        if (0 === strpos($pathinfo, '/admin/users') && preg_match('#^/admin/users/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'en__RG__adminUserView')), array (  '_controller' => 'AppBundle\\Controller\\AdminController::sampleAction',  '_locale' => 'en',));
         }
 
-        // fr__RG__sample
-        if (0 === strpos($pathinfo, '/fr/sample') && preg_match('#^/fr/sample/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-            return $this->mergeDefaults(array_replace($matches, array('_route' => 'fr__RG__sample')), array (  '_controller' => 'AppBundle\\Controller\\AdminController::sampleAction',  '_locale' => 'fr',));
+        // fr__RG__adminUserView
+        if (0 === strpos($pathinfo, '/fr/admin/users') && preg_match('#^/fr/admin/users/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'fr__RG__adminUserView')), array (  '_controller' => 'AppBundle\\Controller\\AdminController::sampleAction',  '_locale' => 'fr',));
         }
 
-        // pl__RG__sample
-        if (0 === strpos($pathinfo, '/pl/sample') && preg_match('#^/pl/sample/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-            return $this->mergeDefaults(array_replace($matches, array('_route' => 'pl__RG__sample')), array (  '_controller' => 'AppBundle\\Controller\\AdminController::sampleAction',  '_locale' => 'pl',));
+        // pl__RG__adminUserView
+        if (0 === strpos($pathinfo, '/pl/admin/users') && preg_match('#^/pl/admin/users/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'pl__RG__adminUserView')), array (  '_controller' => 'AppBundle\\Controller\\AdminController::sampleAction',  '_locale' => 'pl',));
         }
 
         // de__RG__cart

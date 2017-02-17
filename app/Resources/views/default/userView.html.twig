@@ -38,24 +38,28 @@
 
         <h3>Zamówienia:</h3>
         <div class="userOrders">
-            <table class="table table-striped">
-                <tr>
-                    <td>#</td>
-                    <td>ID zamówienia:</td>
-                    <td>Data złożenia:</td>
-                    <td>Status:</td>
-                    <td></td>
-                </tr>
-                {% for order in orders %}
+            {% if orders is empty %}
+                Ten użytkownik niczego nie zamawiał!
+            {% else %}
+                <table class="table table-striped">
                     <tr>
-                        <td>{{ loop.index }}.</td>
-                        <td><a href="{{ path('adminOrdersDetails', {'orderId': order.id}) }}">{{ order.id }}</a></td>
-                        <td>{{ order.orderTime|date("d.m.y H:i:s") }}</td>
-                        <td>{{ order.status }}</td>
-                        <td><a href="{{ path('adminOrdersDetails', {'orderId': order.id}) }}" class="btn btn-default">Szczegóły</a> </td>
+                        <td>#</td>
+                        <td>ID zamówienia:</td>
+                        <td>Data złożenia:</td>
+                        <td>Status:</td>
+                        <td></td>
                     </tr>
-                {% endfor %}
-            </table>
+                    {% for order in orders %}
+                        <tr>
+                            <td>{{ loop.index }}.</td>
+                            <td><a href="{{ path('adminOrdersDetails', {'orderId': order.id}) }}">{{ order.id }}</a></td>
+                            <td>{{ order.orderTime|date("d.m.y H:i:s") }}</td>
+                            <td>{{ order.status }}</td>
+                            <td><a href="{{ path('adminOrdersDetails', {'orderId': order.id}) }}" class="btn btn-default">Szczegóły</a> </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
         </div>
     </div>
 

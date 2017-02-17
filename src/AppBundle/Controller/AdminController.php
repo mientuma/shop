@@ -121,11 +121,15 @@ class AdminController extends BaseController
     /**
      * @param $id
      * @return Response
-     * @Route("/sample/{id}", name="sample")
+     * @Route("/admin/users/{id}", name="adminUserView")
      */
     public function sampleAction($id)
     {
         $user = $this->getDoctrine()->getRepository('AppBundle:User')->find($id);
+        if(!$user)
+        {
+            throw $this->createNotFoundException('W bazie nie ma użytkownika o takim Id!');
+        }
         $orders = $this->getDoctrine()->getRepository('AppBundle:Orders')->findByUser($user);
         return $this->render('default/userView.html.twig', array(
             'user' => $user,
