@@ -50,16 +50,16 @@ class AdminController extends BaseController
      */
     public function ordersDetailsAdminAction($orderId)
     {
-        $order = $this->get('app.order.service')->getOrder($orderId);
+        $order = $this->getDoctrine()->getRepository('AppBundle:Orders')->find($orderId);
         $orderedProducts = $this->getDoctrine()->getRepository('AppBundle:OrderedProducts')->findById($orderId);
         $orderDetails = $this->get('app.ordered.products.service')->countFinalPrice($orderedProducts);
         $deliveryPrice = $order->getDelivery()->getPrice();
         $sum = $this->get('app.ordered.products.service')->countSum($deliveryPrice, $orderDetails);
 
-        return $this->render('default/orderListAdmin.html.twig', array(
+        return $this->render('default/orderDetailsAdmin.html.twig', array(
             'orderDetails' => $orderDetails,
             'sum' => $sum,
-            'orders' => $order
+            'order' => $order
         ));
     }
 
@@ -114,6 +114,22 @@ class AdminController extends BaseController
 
         return $this->render('default/supply.html.twig', array(
             'form' => $form->createView()
+        ));
+    }
+
+
+    /**
+     * @param $id
+     * @return Response
+     * @Route("/sample/{id}", name="sample")
+     */
+    public function sampleAction($id)
+    {
+        $user = $this->getDoctrine()->getRepository('AppBundle:User')->find($id);
+        $orders = $this->getDoctrine()->getRepository('AppBundle:Orders')->findByUser($user);
+        return $this->render('default/userView.html.twig', array(
+            'user' => $user,
+            'orders' => $orders
         ));
     }
 }

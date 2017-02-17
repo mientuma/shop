@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+
+{% block stylesheets %}
+    <style>
+        .userInfo
+        {
+            float: left;
+            width: 50%;
+            padding: 2px 5px 2px 5px;
+        }
+
+        .userOrders
+        {
+            padding: 10px;
+            width: 100%;
+        }
+
+        .clear
+        {
+            clear: both;
+        }
+    </style>
+{% endblock %}
+
+
+{% block body %}
+
+    <div class="container">
+        <h3>Dane użytkownika:</h3>
+        <div class="userInfo">
+            Użytkownik: <b>{{ user.username }}</b><br/>
+            Adres e-mail: <b>{{ user.email }}</b><br/>
+            Ostatnia aktywność: <b>{{ user.lastlogin|date("d.m.y H:i:s") }}</b><br/>
+        </div>
+
+        <div class="clear"></div>
+
+        <h3>Zamówienia:</h3>
+        <div class="userOrders">
+            <table class="table table-striped">
+                <tr>
+                    <td>#</td>
+                    <td>ID zamówienia:</td>
+                    <td>Data złożenia:</td>
+                    <td>Status:</td>
+                    <td></td>
+                </tr>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ loop.index }}.</td>
+                        <td><a href="{{ path('adminOrdersDetails', {'orderId': order.id}) }}">{{ order.id }}</a></td>
+                        <td>{{ order.orderTime|date("d.m.y H:i:s") }}</td>
+                        <td>{{ order.status }}</td>
+                        <td><a href="{{ path('adminOrdersDetails', {'orderId': order.id}) }}" class="btn btn-default">Szczegóły</a> </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

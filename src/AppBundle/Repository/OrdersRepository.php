@@ -17,4 +17,11 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
             array('orderTime' => 'ASC')
         );
     }
+
+    public function findByUser($user)
+    {
+        return $this->findBy(array(
+            'userId' => $user
+        ));
+    }
 }
