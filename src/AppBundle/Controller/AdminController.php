@@ -39,7 +39,7 @@ class AdminController extends BaseController
     public function ordersDetailsAdminAction($orderId)
     {
         $order = $this->getDoctrine()->getRepository('AppBundle:Orders')->find($orderId);
-        $orderedProducts = $this->getDoctrine()->getRepository('AppBundle:OrderedProducts')->findById($orderId);
+        $orderedProducts = $this->getDoctrine()->getRepository('AppBundle:OrderedProducts')->findByOrderId($orderId);
         $orderDetails = $this->get('app.ordered.products.service')->countFinalPrice($orderedProducts);
         $deliveryPrice = $order->getDelivery()->getPrice();
         $sum = $this->get('app.ordered.products.service')->countSum($deliveryPrice, $orderDetails);
@@ -84,20 +84,20 @@ class AdminController extends BaseController
             $em->flush();
 
             $supplies = $form->get('supplyProducts')->getData()->toArray();
+            $this->get('app.supply.manager.service')->addProducts($supplies);
 
-            $productIds = $this->get('app.supply.manager.service')->addProducts($supplies);
-            $orders = $this->get('app.order.service')->findByPendingStatus();
-            $orderedProducts = $this->getDoctrine()->getRepository('AppBundle:OrderedProducts')->findByReservation($orders, $productIds);
-            $this->addFlash(
-                'supplyNote',
-                'Dostawa została pomyślnie przyjęta!'
-            );
-
-            if($orderedProducts)
-            {
-                $this->get('app.ordered.products.service')->manageOrderedProductsReservation($orderedProducts);
-            }
-            return $this->redirectToRoute('adminSupply');
+//            $orders = $this->get('app.order.service')->findByPendingStatus();
+//            $orderedProducts = $this->getDoctrine()->getRepository('AppBundle:OrderedProducts')->findByReservation($orders, $productIds);
+//            $this->addFlash(
+//                'supplyNote',
+//                'Dostawa została pomyślnie przyjęta!'
+//            );
+//
+//            if($orderedProducts)
+//            {
+//                $this->get('app.ordered.products.service')->manageOrderedProductsReservation($orderedProducts);
+//            }
+//            return $this->redirectToRoute('adminSupply');
         }
 
         return $this->render('default/supply.html.twig', array(
@@ -111,7 +111,7 @@ class AdminController extends BaseController
      * @return Response
      * @Route("/admin/users/{id}", name="adminUserView")
      */
-    public function UserDetailsAdminAction($id)
+    public function userDetailsAdminAction($id)
     {
         $user = $this->getDoctrine()->getRepository('AppBundle:User')->find($id);
         if(!$user)
@@ -123,5 +123,38 @@ class AdminController extends BaseController
             'user' => $user,
             'orders' => $orders
         ));
+    }
+
+    /**
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @Route("admin/orders/update/{id}", name="adminUpdateSingleOrder")
+     */
+    public function updateSingleOrder($id)
+    {
+        $orderedProducts = $this->getDoctrine()->getRepository('AppBundle:OrderedProducts')->findByOrderId($id);
+        return $this->orderUpdateAdminAction($orderedProducts);
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @Route("admin/omg", name="adminUpdateAllOrders")
+     */
+    public function updateAllOrders()
+    {
+        $orderedProducts = $this->getDoctrine()->getRepository('AppBundle:OrderedProducts')->findAllPending();
+        return $this->orderUpdateAdminAction($orderedProducts);
+    }
+
+    /**
+     * @param $orderedProducts
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @Route("dupa/", name="adminOrderUpdate")
+     */
+    public function orderUpdateAdminAction($orderedProducts)
+    {
+        $orderedProducts = $this->get('app.ordered.products.service')->checkProductStatus($orderedProducts);
+        $this->get('app.ordered.products.service')->manageOrderedProductsReservation($orderedProducts);
+        return $this->redirectToRoute('adminOrders');
     }
 }

@@ -10,21 +10,27 @@ namespace AppBundle\Repository;
  */
 class OrderedProductsRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function findById($orderId)
+    public function findByOrderId($orderId)
     {
         return $this->findBy(array(
             'orderId' => $orderId
         ));
     }
 
-    public function findByReservation($orders, $productIds)
+    public function findByReservation($orders)
     {
         return $this->findBy(
             array(
                 'orderId' => ($orders),
-                'productId' => ($productIds),
                 'productStatus' => array('Częściowa rezerwacja, oczekuje na dostawę', 'Brak towaru, oczekuje na dostawę')
             )
         );
+    }
+
+    public function findAllPending()
+    {
+        return $this->findBy(array(
+            'productStatus' => array('Częściowa rezerwacja, oczekuje na dostawę', 'Brak towaru, oczekuje na dostawę', 'Towar częściowo zarezerwowany')
+        ));
     }
 }

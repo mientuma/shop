@@ -10,6 +10,8 @@
                 <td>Nazwa Produktu:</td>
                 <td>Cena:</td>
                 <td>Zamówiana ilość:</td>
+                <td>Zarezerwowana ilość:</td>
+                <td>Na stanie:</td>
                 <td>Wartość:</td>
                 <td>Dostępność Produktu:</td>
             </tr>
@@ -19,6 +21,8 @@
                     <td><a href="{{ path('shopproductinfo', {'id': orderDetail.product.id}) }}" target="_blank">{{ orderDetail.product.name }}</a></td>
                     <td>{{ orderDetail.productPrice }} PLN</td>
                     <td>{{ orderDetail.productQuantity }}</td>
+                    <td>{{ orderDetail.productReserved }}</td>
+                    <td>{{ orderDetail.product.quantity }}</td>
                     <td>{{ orderDetail.finalPrice }} PLN</td>
                     <td>{{ orderDetail.productStatus }}</td>
                 </tr>
@@ -30,8 +34,11 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
             </tr>
             <tr>
+                <td></td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td>Sposób dostawy:</td>
@@ -46,8 +53,12 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
+                <td></td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -59,11 +70,14 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
+                <td></td>
                 <td>Status zamówienia:</td>
                 <td>{{ order.status }}</td>
                 <td></td>
             </tr>
         </table>
+        <a href="{{ path('adminUpdateSingleOrder', {'id': order.id}) }}" class="btn btn-default">Zaktualizuj rezerwacje dla tego zamówienia</a>
     </div>
 
 {% endblock %}

@@ -19,8 +19,6 @@ class SupplyManager
 
     public function addProducts($supplies)
     {
-        $idsArray = array();
-
         foreach ($supplies as $supply)
         {
             $this->supply = $supply;
@@ -29,13 +27,8 @@ class SupplyManager
             $product = $this->supply->getProduct();
             $product->updateQuantity($addedQuantity);
 
-            $idsArray[] += $product->getId();
-
             $this->em->persist($product);
             $this->em->flush();
         }
-
-        return $idsArray;
-
     }
 }

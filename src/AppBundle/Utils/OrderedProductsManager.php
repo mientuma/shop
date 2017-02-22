@@ -7,12 +7,12 @@ use Doctrine\ORM\EntityManager;
 
 class OrderedProductsManager
 {
-    protected $product;
+    protected $orderedProduct;
     protected $em;
 
     public function __construct(OrderedProducts $orderedProducts, EntityManager $entityManager)
     {
-        $this->product = $orderedProducts;
+        $this->orderedProduct = $orderedProducts;
         $this->em = $entityManager;
     }
 
@@ -20,8 +20,8 @@ class OrderedProductsManager
     {
         foreach($orderedProducts as $orderedProduct)
         {
-            $this->product = $orderedProduct;
-            $this->product->setFinalPrice();
+            $this->orderedProduct = $orderedProduct;
+            $this->orderedProduct->setFinalPrice();
         }
 
         return $orderedProducts;
@@ -33,21 +33,33 @@ class OrderedProductsManager
 
         foreach ($orderDetails as $orderRow)
         {
-            $this->product = $orderRow;
-            $sum += $this->product->getFinalPrice();
+            $this->orderedProduct = $orderRow;
+            $sum += $this->orderedProduct->getFinalPrice();
         }
 
         return $sum;
     }
 
+    public function checkProductStatus($orderedProducts)
+    {
+        return $neededObjects = array_filter(
+            $orderedProducts,
+            function ($e)
+            {
+                return $e->getProductStatus() != 'Towar zarezerwowany';
+            }
+        );
+    }
+
     public function manageOrderedProductsReservation($orderedProducts)
     {
-        foreach ($orderedProducts as $orderedProduct)
+        foreach ($orderedProducts as $op)
         {
-            $this->product = $orderedProduct;
-            $product = $this->product->getProduct(); // Konkretny produkt z bazy produktów.
-            $orderedQuantity = $this->product->getProductQuantity(); // Zamawiana ilość.
-            $reservation = $this->product->getProductReserved(); // Ilość zarezerwowana przy zamówieniu.
+            $this->orderedProduct = $op;
+
+            $product = $this->orderedProduct->getProduct(); // Konkretny produkt z bazy produktów.
+            $orderedQuantity = $this->orderedProduct->getProductQuantity(); // Zamawiana ilość.
+            $reservation = $this->orderedProduct->getProductReserved(); // Ilość zarezerwowana przy zamówieniu.
             $difference = $orderedQuantity - $reservation; // Różnica między ilością już zarezerwowaną a zamówioną.
             $originalProductQuantity = $product->getQuantity(); // Ilość konkretnego produktu w bazie na teraz.
 
@@ -56,10 +68,10 @@ class OrderedProductsManager
                 $newProductValue = $originalProductQuantity - $difference;
                 $product->setQuantity($newProductValue);
 
-                $this->product->setProductReserved($orderedQuantity);
-                $this->product->setProductStatus('Towar zarezerwowany');
+                $this->orderedProduct->setProductReserved($orderedQuantity);
+                $this->orderedProduct->setProductStatus('Towar zarezerwowany');
                 $this->em->persist($product);
-                $this->em->persist($this->product);
+                $this->em->persist($this->orderedProduct);
                 $this->em->flush();
             }
             elseif($originalProductQuantity == 0) // Brak produktu w bazie.
@@ -69,10 +81,10 @@ class OrderedProductsManager
             else // W db jest niepełna ilość produktu do obsłużenia tego zamówienia.
             {
                 $newReservation = $reservation + $originalProductQuantity;
-                $this->product->setProductReserved($newReservation);
-                $this->product->setProductStatus('Towar częściowo zarezerwowany');
+                $this->orderedProduct->setProductReserved($newReservation);
+                $this->orderedProduct->setProductStatus('Towar częściowo zarezerwowany');
                 $product->setQuantity(0);
-                $this->em->persist($this->product);
+                $this->em->persist($this->orderedProduct);
                 $this->em->persist($product);
                 $this->em->flush();
             }

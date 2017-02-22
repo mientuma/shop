@@ -202,22 +202,101 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
 
         // de__RG__adminUserView
         if (0 === strpos($pathinfo, '/de/admin/users') && preg_match('#^/de/admin/users/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-            return $this->mergeDefaults(array_replace($matches, array('_route' => 'de__RG__adminUserView')), array (  '_controller' => 'AppBundle\\Controller\\AdminController::sampleAction',  '_locale' => 'de',));
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'de__RG__adminUserView')), array (  '_controller' => 'AppBundle\\Controller\\AdminController::userDetailsAdminAction',  '_locale' => 'de',));
         }
 
         // en__RG__adminUserView
         if (0 === strpos($pathinfo, '/admin/users') && preg_match('#^/admin/users/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-            return $this->mergeDefaults(array_replace($matches, array('_route' => 'en__RG__adminUserView')), array (  '_controller' => 'AppBundle\\Controller\\AdminController::sampleAction',  '_locale' => 'en',));
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'en__RG__adminUserView')), array (  '_controller' => 'AppBundle\\Controller\\AdminController::userDetailsAdminAction',  '_locale' => 'en',));
         }
 
         // fr__RG__adminUserView
         if (0 === strpos($pathinfo, '/fr/admin/users') && preg_match('#^/fr/admin/users/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-            return $this->mergeDefaults(array_replace($matches, array('_route' => 'fr__RG__adminUserView')), array (  '_controller' => 'AppBundle\\Controller\\AdminController::sampleAction',  '_locale' => 'fr',));
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'fr__RG__adminUserView')), array (  '_controller' => 'AppBundle\\Controller\\AdminController::userDetailsAdminAction',  '_locale' => 'fr',));
         }
 
         // pl__RG__adminUserView
         if (0 === strpos($pathinfo, '/pl/admin/users') && preg_match('#^/pl/admin/users/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-            return $this->mergeDefaults(array_replace($matches, array('_route' => 'pl__RG__adminUserView')), array (  '_controller' => 'AppBundle\\Controller\\AdminController::sampleAction',  '_locale' => 'pl',));
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'pl__RG__adminUserView')), array (  '_controller' => 'AppBundle\\Controller\\AdminController::userDetailsAdminAction',  '_locale' => 'pl',));
+        }
+
+        // de__RG__adminUpdateSingleOrder
+        if (0 === strpos($pathinfo, '/de/admin/orders/update') && preg_match('#^/de/admin/orders/update/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'de__RG__adminUpdateSingleOrder')), array (  '_controller' => 'AppBundle\\Controller\\AdminController::updateSingleOrder',  '_locale' => 'de',));
+        }
+
+        // en__RG__adminUpdateSingleOrder
+        if (0 === strpos($pathinfo, '/admin/orders/update') && preg_match('#^/admin/orders/update/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'en__RG__adminUpdateSingleOrder')), array (  '_controller' => 'AppBundle\\Controller\\AdminController::updateSingleOrder',  '_locale' => 'en',));
+        }
+
+        // fr__RG__adminUpdateSingleOrder
+        if (0 === strpos($pathinfo, '/fr/admin/orders/update') && preg_match('#^/fr/admin/orders/update/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'fr__RG__adminUpdateSingleOrder')), array (  '_controller' => 'AppBundle\\Controller\\AdminController::updateSingleOrder',  '_locale' => 'fr',));
+        }
+
+        // pl__RG__adminUpdateSingleOrder
+        if (0 === strpos($pathinfo, '/pl/admin/orders/update') && preg_match('#^/pl/admin/orders/update/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'pl__RG__adminUpdateSingleOrder')), array (  '_controller' => 'AppBundle\\Controller\\AdminController::updateSingleOrder',  '_locale' => 'pl',));
+        }
+
+        // de__RG__adminUpdateAllOrders
+        if ($pathinfo === '/de/admin/omg') {
+            return array (  '_controller' => 'AppBundle\\Controller\\AdminController::updateAllOrders',  '_locale' => 'de',  '_route' => 'de__RG__adminUpdateAllOrders',);
+        }
+
+        // en__RG__adminUpdateAllOrders
+        if ($pathinfo === '/admin/omg') {
+            return array (  '_controller' => 'AppBundle\\Controller\\AdminController::updateAllOrders',  '_locale' => 'en',  '_route' => 'en__RG__adminUpdateAllOrders',);
+        }
+
+        // fr__RG__adminUpdateAllOrders
+        if ($pathinfo === '/fr/admin/omg') {
+            return array (  '_controller' => 'AppBundle\\Controller\\AdminController::updateAllOrders',  '_locale' => 'fr',  '_route' => 'fr__RG__adminUpdateAllOrders',);
+        }
+
+        // pl__RG__adminUpdateAllOrders
+        if ($pathinfo === '/pl/admin/omg') {
+            return array (  '_controller' => 'AppBundle\\Controller\\AdminController::updateAllOrders',  '_locale' => 'pl',  '_route' => 'pl__RG__adminUpdateAllOrders',);
+        }
+
+        if (0 === strpos($pathinfo, '/d')) {
+            // de__RG__adminOrderUpdate
+            if (rtrim($pathinfo, '/') === '/de/dupa') {
+                if (substr($pathinfo, -1) !== '/') {
+                    return $this->redirect($pathinfo.'/', 'de__RG__adminOrderUpdate');
+                }
+
+                return array (  '_controller' => 'AppBundle\\Controller\\AdminController::orderUpdateAdminAction',  '_locale' => 'de',  '_route' => 'de__RG__adminOrderUpdate',);
+            }
+
+            // en__RG__adminOrderUpdate
+            if (rtrim($pathinfo, '/') === '/dupa') {
+                if (substr($pathinfo, -1) !== '/') {
+                    return $this->redirect($pathinfo.'/', 'en__RG__adminOrderUpdate');
+                }
+
+                return array (  '_controller' => 'AppBundle\\Controller\\AdminController::orderUpdateAdminAction',  '_locale' => 'en',  '_route' => 'en__RG__adminOrderUpdate',);
+            }
+
+        }
+
+        // fr__RG__adminOrderUpdate
+        if (rtrim($pathinfo, '/') === '/fr/dupa') {
+            if (substr($pathinfo, -1) !== '/') {
+                return $this->redirect($pathinfo.'/', 'fr__RG__adminOrderUpdate');
+            }
+
+            return array (  '_controller' => 'AppBundle\\Controller\\AdminController::orderUpdateAdminAction',  '_locale' => 'fr',  '_route' => 'fr__RG__adminOrderUpdate',);
+        }
+
+        // pl__RG__adminOrderUpdate
+        if (rtrim($pathinfo, '/') === '/pl/dupa') {
+            if (substr($pathinfo, -1) !== '/') {
+                return $this->redirect($pathinfo.'/', 'pl__RG__adminOrderUpdate');
+            }
+
+            return array (  '_controller' => 'AppBundle\\Controller\\AdminController::orderUpdateAdminAction',  '_locale' => 'pl',  '_route' => 'pl__RG__adminOrderUpdate',);
         }
 
         // de__RG__cart
