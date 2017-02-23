@@ -2,7 +2,9 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Orders;
 use AppBundle\Entity\Supply;
+use AppBundle\Form\OrderSelectionForm;
 use AppBundle\Form\Type\SupplyForm;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,14 +22,25 @@ class AdminController extends BaseController
     }
 
     /**
+     * @param Request $request
      * @return Response
      * @Route("/admin/orders", name="adminOrders")
      */
-    public function ordersAdminAction()
+    public function ordersAdminAction(Request $request)
     {
         $orders = $this->get('app.order.service')->getOrders();
+        $order = new Orders();
+        $form = $this->createForm(OrderSelectionForm::class, $order);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $timeRange = $form->get('orderTime')->getData();
+            $status = $form->get('status')->getData();
+            $orders = $this->getDoctrine()->getRepository('AppBundle:Orders')->findByTimeRangeAndStatus($timeRange, $status);
+        }
         return $this->render('default/orderListAdmin.html.twig', array(
-            'orders' => $orders
+            'orders' => $orders,
+            'form' => $form->createView()
         ));
     }
 

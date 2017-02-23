@@ -24,4 +24,21 @@ class OrdersRepository extends \Doctrine\ORM\EntityRepository
             'userId' => $user
         ));
     }
+
+    public function findByTimeRangeAndStatus($timeRange, $status)
+    {
+        $qb = $this->_em->createQueryBuilder();
+
+        $qb->select('o')
+            ->from('AppBundle:Orders', 'o')
+            ->where('o.orderTime BETWEEN :timeRange AND o.orderTime AND o.status = :status')
+            ->setParameters(array(
+                'timeRange' => $timeRange,
+                'status' => $status
+            ))
+            ->orderBy('o.orderTime', 'ASC');
+
+        return $qb->getQuery()->getResult();
+
+    }
 }
