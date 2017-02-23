@@ -74,10 +74,6 @@ class OrderedProductsManager
                 $this->em->persist($this->orderedProduct);
                 $this->em->flush();
             }
-            elseif($originalProductQuantity == 0) // Brak produktu w bazie.
-            {
-                break 1;
-            }
             else // W db jest niepełna ilość produktu do obsłużenia tego zamówienia.
             {
                 $newReservation = $reservation + $originalProductQuantity;
