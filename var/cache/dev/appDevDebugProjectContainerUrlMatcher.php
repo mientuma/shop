@@ -299,6 +299,26 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
             return array (  '_controller' => 'AppBundle\\Controller\\AdminController::orderUpdateAdminAction',  '_locale' => 'pl',  '_route' => 'pl__RG__adminOrderUpdate',);
         }
 
+        // de__RG__adminHistory
+        if ($pathinfo === '/de/admin/history') {
+            return array (  '_controller' => 'AppBundle\\Controller\\AdminController::historyAdminAction',  '_locale' => 'de',  '_route' => 'de__RG__adminHistory',);
+        }
+
+        // en__RG__adminHistory
+        if ($pathinfo === '/admin/history') {
+            return array (  '_controller' => 'AppBundle\\Controller\\AdminController::historyAdminAction',  '_locale' => 'en',  '_route' => 'en__RG__adminHistory',);
+        }
+
+        // fr__RG__adminHistory
+        if ($pathinfo === '/fr/admin/history') {
+            return array (  '_controller' => 'AppBundle\\Controller\\AdminController::historyAdminAction',  '_locale' => 'fr',  '_route' => 'fr__RG__adminHistory',);
+        }
+
+        // pl__RG__adminHistory
+        if ($pathinfo === '/pl/admin/history') {
+            return array (  '_controller' => 'AppBundle\\Controller\\AdminController::historyAdminAction',  '_locale' => 'pl',  '_route' => 'pl__RG__adminHistory',);
+        }
+
         // de__RG__cart
         if ($pathinfo === '/de/cart') {
             return array (  '_controller' => 'AppBundle\\Controller\\CartController::cartAction',  '_locale' => 'de',  '_route' => 'de__RG__cart',);

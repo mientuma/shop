@@ -163,4 +163,13 @@ class AdminController extends BaseController
         $this->get('app.ordered.products.service')->manageOrderedProductsReservation($orderedProducts);
         return $this->redirectToRoute('adminOrders');
     }
+
+    /**
+     * @Route("admin/history", name="adminHistory")
+     */
+    public function historyAdminAction()
+    {
+
+        return $this->render("default/history.html.twig");
+    }
 }
