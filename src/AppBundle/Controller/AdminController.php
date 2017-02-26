@@ -98,19 +98,12 @@ class AdminController extends BaseController
 
             $supplies = $form->get('supplyProducts')->getData()->toArray();
             $this->get('app.supply.manager.service')->addProducts($supplies);
+            $this->addFlash(
+                'supplyNote',
+                'Dostawa została pomyślnie przyjęta!'
+            );
 
-//            $orders = $this->get('app.order.service')->findByPendingStatus();
-//            $orderedProducts = $this->getDoctrine()->getRepository('AppBundle:OrderedProducts')->findByReservation($orders, $productIds);
-//            $this->addFlash(
-//                'supplyNote',
-//                'Dostawa została pomyślnie przyjęta!'
-//            );
-//
-//            if($orderedProducts)
-//            {
-//                $this->get('app.ordered.products.service')->manageOrderedProductsReservation($orderedProducts);
-//            }
-//            return $this->redirectToRoute('adminSupply');
+            return $this->redirectToRoute('adminSupply');
         }
 
         return $this->render('default/supply.html.twig', array(
