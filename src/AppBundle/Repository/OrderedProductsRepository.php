@@ -10,6 +10,20 @@ namespace AppBundle\Repository;
  */
 class OrderedProductsRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findByProductId($id)
+    {
+        return $this->findBy(array(
+            'productId' => $id
+        ));
+    }
+
+    public function findById($id)
+    {
+        return $this->findBy(array(
+            'id' => $id
+        ));
+    }
+
     public function findByOrderId($orderId)
     {
         return $this->findBy(array(

@@ -166,24 +166,34 @@ class AdminController extends BaseController
 
     /**
      * @param $id
+     * @param Request $request
      * @return Response
      * @Route("admin/history/product/{id}", name="adminHistory")
      */
-    public function historyAdminAction($id)
+    public function historyAdminAction($id, Request $request)
     {
-        $supplies = $this->getDoctrine()->getRepository('AppBundle:SupplyProducts')->findBy(array(
-            'productId' => $id
-        ));
-        $orderedProducts = $this->getDoctrine()->getRepository('AppBundle:OrderedProducts')->findBy(array(
-            'productId' => $id
-        ));
+        $supplies = $this->getDoctrine()->getRepository('AppBundle:SupplyProducts')->findByProductId($id);
+        $orderedProducts = $this->getDoctrine()->getRepository('AppBundle:OrderedProducts')->findByProductId($id);
+
+        if(!$supplies || !$orderedProducts)
+        {
+            throw $this->createNotFoundException('W db nie ma produktu o takim id!');
+        }
 
         $history = $this->get('app.product.history.service')->getProductHistory($supplies, $orderedProducts);
         $sortHistory = $this->get('app.product.history.service')->arrangeProductHistory($history);
         $finalHistory = $this->get('app.product.history.service')->setCurrentQuantity($sortHistory);
 
+        $param = $request->get('reversed');
+        if($param == 1)
+        {
+            $finalHistory = array_reverse($finalHistory);
+        }
+
         return $this->render("default/history.html.twig", array(
-            'history' => $finalHistory
+            'id' => $id,
+            'history' => $finalHistory,
+            'param' => $param
         ));
     }
 }

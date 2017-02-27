@@ -12,16 +12,25 @@
                 <td>Na stanie</td>
                 <td>Akcja</td>
             </tr>
-        {% for history in history %}
-        <tr>
-            <td>{{ loop.index }}.</td>
-            <td>{{ history.time|date("d.m.y H:i:s")}}</td>
-            <td>{{ history.user }}</td>
-            <td>{{ history.quantity }} szt.</td>
-            <td>{{ history.currentQuantity }} szt.</td>
-            <td>{{ history.status }}</td>
-        </tr>
-        {% endfor %}
+            {% for history in history %}
+                <tr>
+                    <td>{{ loop.index }}.</td>
+                    <td>{{ history.time|date("d.m.y H:i:s")}}</td>
+                    <td>{{ history.user }}</td>
+                    <td>{{ history.quantity }} szt.</td>
+                    <td>{{ history.currentQuantity }} szt.</td>
+                    <td>{{ history.status }}</td>
+                </tr>
+            {% endfor %}
         </table>
+
+
+        {% if param == 1 %}
+            <a href="{{ path('adminHistory', {'id': id}) }}?reversed=0" class="btn btn-default">Odwróć kolejność</a>
+        {% else %}
+            <a href="{{ path('adminHistory', {'id': id}) }}?reversed=1" class="btn btn-default">Odwróć kolejność</a>
+        {% endif %}
+
+
     </div>
 {% endblock %}
