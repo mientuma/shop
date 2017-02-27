@@ -35,7 +35,6 @@ twig:
   cache: false
 
 swiftmailer:
-    delivery_address: iiyvbfau@sharklasers.com
-#   transport: gmail
-#   username:
-#   password:
+    transport: gmail
+    username:  '%mailer_user%'
+    password:  '%mailer_password%'

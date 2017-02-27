@@ -196,4 +196,18 @@ class AdminController extends BaseController
             'param' => $param
         ));
     }
+
+    /**
+     * @Route("admin/email", name="email")
+     */
+    public function emailAction()
+    {
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Hello Email')
+            ->setFrom('hpnorek@gmail.com')
+            ->setTo('mientuma@gmail.com')
+            ->setBody('Wiadomość testowa');
+        $this->get('mailer')->send($message);
+        return $this->redirectToRoute('homepage');
+    }
 }

@@ -300,6 +300,26 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
             return $this->mergeDefaults(array_replace($matches, array('_route' => 'pl__RG__adminHistory')), array (  '_controller' => 'AppBundle\\Controller\\AdminController::historyAdminAction',  '_locale' => 'pl',));
         }
 
+        // de__RG__email
+        if ($pathinfo === '/de/admin/email') {
+            return array (  '_controller' => 'AppBundle\\Controller\\AdminController::emailAction',  '_locale' => 'de',  '_route' => 'de__RG__email',);
+        }
+
+        // en__RG__email
+        if ($pathinfo === '/admin/email') {
+            return array (  '_controller' => 'AppBundle\\Controller\\AdminController::emailAction',  '_locale' => 'en',  '_route' => 'en__RG__email',);
+        }
+
+        // fr__RG__email
+        if ($pathinfo === '/fr/admin/email') {
+            return array (  '_controller' => 'AppBundle\\Controller\\AdminController::emailAction',  '_locale' => 'fr',  '_route' => 'fr__RG__email',);
+        }
+
+        // pl__RG__email
+        if ($pathinfo === '/pl/admin/email') {
+            return array (  '_controller' => 'AppBundle\\Controller\\AdminController::emailAction',  '_locale' => 'pl',  '_route' => 'pl__RG__email',);
+        }
+
         // de__RG__cart
         if ($pathinfo === '/de/cart') {
             return array (  '_controller' => 'AppBundle\\Controller\\CartController::cartAction',  '_locale' => 'de',  '_route' => 'de__RG__cart',);
