@@ -3,6 +3,25 @@
 
 {% block body %}
     <div class="container">
-
+        <table class="table table-striped">
+            <tr>
+                <td>#</td>
+                <td>Czas</td>
+                <td>Użytkownik</td>
+                <td>Zmiana</td>
+                <td>Na stanie</td>
+                <td>Akcja</td>
+            </tr>
+        {% for history in history %}
+        <tr>
+            <td>{{ loop.index }}.</td>
+            <td>{{ history.time|date("d.m.y H:i:s")}}</td>
+            <td>{{ history.user }}</td>
+            <td>{{ history.quantity }} szt.</td>
+            <td>{{ history.currentQuantity }} szt.</td>
+            <td>{{ history.status }}</td>
+        </tr>
+        {% endfor %}
+        </table>
     </div>
 {% endblock %}

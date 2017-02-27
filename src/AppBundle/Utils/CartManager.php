@@ -39,7 +39,7 @@ class CartManager
             if($productQuantity >= $quantity)
             {
                 $orderProduct
-                    ->setProductStatus('Dostępny, zarezerwowany')
+                    ->setProductStatus('Towar zarezerwowany')
                     ->setProductReserved($quantity);
                 $finalQuantity = $productQuantity - $quantity;
                 $product->setQuantity($finalQuantity);

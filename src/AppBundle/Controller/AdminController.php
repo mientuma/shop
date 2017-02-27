@@ -144,7 +144,7 @@ class AdminController extends BaseController
 
     /**
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * @Route("admin/omg", name="adminUpdateAllOrders")
+     * @Route("admin/updateall", name="adminUpdateAllOrders")
      */
     public function updateAllOrders()
     {
@@ -155,7 +155,7 @@ class AdminController extends BaseController
     /**
      * @param $orderedProducts
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * @Route("dupa/", name="adminOrderUpdate")
+     * @Route("admin/actions/update", name="adminOrderUpdate")
      */
     public function orderUpdateAdminAction($orderedProducts)
     {
@@ -165,11 +165,25 @@ class AdminController extends BaseController
     }
 
     /**
-     * @Route("admin/history", name="adminHistory")
+     * @param $id
+     * @return Response
+     * @Route("admin/history/product/{id}", name="adminHistory")
      */
-    public function historyAdminAction()
+    public function historyAdminAction($id)
     {
+        $supplies = $this->getDoctrine()->getRepository('AppBundle:SupplyProducts')->findBy(array(
+            'productId' => $id
+        ));
+        $orderedProducts = $this->getDoctrine()->getRepository('AppBundle:OrderedProducts')->findBy(array(
+            'productId' => $id
+        ));
 
-        return $this->render("default/history.html.twig");
+        $history = $this->get('app.product.history.service')->getProductHistory($supplies, $orderedProducts);
+        $sortHistory = $this->get('app.product.history.service')->arrangeProductHistory($history);
+        $finalHistory = $this->get('app.product.history.service')->setCurrentQuantity($sortHistory);
+
+        return $this->render("default/history.html.twig", array(
+            'history' => $finalHistory
+        ));
     }
 }

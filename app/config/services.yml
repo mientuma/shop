@@ -17,6 +17,11 @@ services:
     class: AppBundle\Utils\SupplyManager
     arguments: ["@supply.products", "@doctrine.orm.entity_manager"]
 
+  app.product.history.service:
+    class: AppBundle\Utils\ProductHistoryManager
+    arguments: ["@supply.products", "@ordered.products", "@doctrine.orm.entity_manager", "@product.history"]
+
+
 
 ## ENTITIES:
   ordered.products:
@@ -34,3 +39,6 @@ services:
 
   supply.products:
     class: AppBundle\Entity\SupplyProducts
+
+  product.history:
+    class: AppBundle\Utils\ProductHistory
