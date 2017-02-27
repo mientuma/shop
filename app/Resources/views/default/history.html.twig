@@ -3,7 +3,7 @@
 
 {% block body %}
     <div class="container">
-        <table class="table table-striped">
+        <table class="table">
             <tr>
                 <td>#</td>
                 <td>Czas</td>
@@ -13,14 +13,18 @@
                 <td>Akcja</td>
             </tr>
             {% for history in history %}
-                <tr>
-                    <td>{{ loop.index }}.</td>
-                    <td>{{ history.time|date("d.m.y H:i:s")}}</td>
-                    <td>{{ history.user }}</td>
-                    <td>{{ history.quantity }} szt.</td>
-                    <td>{{ history.currentQuantity }} szt.</td>
-                    <td>{{ history.status }}</td>
-                </tr>
+                {% if history.quantity < 0 %}
+                    <tr class="danger">
+                {% else %}
+                    <tr class="success">
+                {% endif %}
+                        <td>{{ loop.index }}.</td>
+                        <td>{{ history.time|date("d.m.y H:i:s")}}</td>
+                        <td>{{ history.user }}</td>
+                        <td>{{ history.quantity }} szt.</td>
+                        <td>{{ history.currentQuantity }} szt.</td>
+                        <td>{{ history.status }}</td>
+                    </tr>
             {% endfor %}
         </table>
 
